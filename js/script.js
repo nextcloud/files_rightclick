@@ -1,14 +1,21 @@
-var openContext = function (event) {
+var openContextOnRightClick = function (event) {
   event.stopPropagation();
   event.preventDefault();
 
   var currentFile = $(event.target).closest('tr');
   var leftToRemove = currentFile.find('.selection').width();
 
+  if (currentFile.find('.fileActionsMenu').length != 0) {
+    currentFile.find('.fileActionsMenu').remove();
+    currentFile.removeClass('mouseOver');
+    currentFile.removeClass('highlighted');
+    currentFile.find('.action-menu').removeClass('open');
+
+    return false;
+  }
+
   setTimeout(function () {
-    if ($('.fileActionsMenu').length != 0)
-      return false;
-    else if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
+    if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
       $(event.target).click();
       return false;
     }
@@ -19,6 +26,21 @@ var openContext = function (event) {
     var menuStyle = $('style.rightClickStyle');
     var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
     var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
+    var generateNewOption = function (action, icon, text, onClick) {
+      menu.find('ul').prepend(
+        $('<li><a href="#" class="menuitem action action-' + action.toLowerCase() + ' permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
+          event.stopPropagation();
+          event.preventDefault();
+
+          menu.remove();
+          currentFile.removeClass('mouseOver');
+          currentFile.removeClass('highlighted');
+          currentFile.find('.action-menu').removeClass('open');
+
+          onClick();
+        })
+      );
+    };
 
     menu.addClass('rightClickMenu');
 
@@ -46,6 +68,61 @@ var openContext = function (event) {
       top: top,
       left: left
     });
+
+    var mimeType = currentFile.attr('data-mime');
+    var text = '';
+    var icon = 'edit';
+    var onClick = function () {
+      currentFile.find('.filename .nametext').click();
+    };
+
+    if (currentFile.attr('data-type') === 'dir') {
+      text = 'Open this folder';
+      icon = 'filetype-folder-drag-accept';
+
+      generateNewOption('Open', 'category-app-bundles', 'Open in a new tab', function () {
+        window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
+      });
+    }
+    if (mimeType === 'text/plain') {
+      text = 'Edit this file';
+    }
+    else if (mimeType.indexOf('image') >= 0) {
+      text = 'See this picture';
+      icon = 'toggle';
+
+      generateNewOption('Open', 'category-multimedia', 'Open in the gallery app', function () {
+        window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
+      });
+    }
+    else if (mimeType.indexOf('audio') >= 0) {
+      var isReading = function () {
+        return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
+      };
+
+      if (isReading()) {
+        text = 'Stop playing';
+        icon = 'pause';
+      }
+      else {
+        text = 'Start playing';
+        icon = 'play';
+
+        onClick = function () {
+          while (!isReading()) {
+            currentFile.find('.filename .nametext').click();
+          }
+        };
+      }
+    }
+    else if (mimeType.indexOf('video') >= 0) {
+      text = 'Start watching';
+      icon = 'play';
+    }
+
+    if (text !== '') {
+      generateNewOption('Open', icon, text, onClick);
+    }
   }, 200)
 
   return false;
@@ -53,5 +130,5 @@ var openContext = function (event) {
 
 if ($('#filesApp').length == 1 && $('#filesApp').val() == 1) {
   $('<style class="rightClickStyle"></style>').appendTo('head');
-  $('#fileList').contextmenu(openContext);
+  $('#fileList').contextmenu(openContextOnRightClick);
 }
