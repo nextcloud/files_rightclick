@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>files_rightclick</id>
+    <name>Files Right Click</name>
+    <summary>Add a simple right click menu on the files Nextcloud app</summary>
+    <description><![CDATA[Not anymore useful to click on the 3 dots button to popup the file menu, now right click on a specific file where you want to access to its menu to simply show it.]]></description>
+    <version>0.1.0</version>
+    <licence>agpl</licence>
+    <author mail="samy@nastuzzi.fr" homepage="https://github.com/NastuzziSamy/files_rightclick.git">NASTUZZI Samy</author>
+    <namespace>FilesRightClick</namespace>
+    <category>files</category>
+    <bugs>https://github.com/NastuzziSamy/files_rightclick/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="12" max-version="13"/>
+    </dependencies>
+</info>
