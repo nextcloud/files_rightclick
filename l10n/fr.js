@@ -3,7 +3,7 @@ OC.L10N.register(
     "Open this folder" : "Ouvrir le dossier",
     "Open in a new tab" : "Ouvrir dans un nouvel onglet",
     "Edit this file" : "Modifier le fichier",
-    "See this picture" : "Modifier le fichier",
+    "See this picture" : "Voir l'image",
     "Open in the gallery app" : "Ouvrir dans la galerie",
     "Start playing" : "Lancer la lecture",
     "Stop playing" : "Arrêter la lecture",
