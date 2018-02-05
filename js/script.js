@@ -2,6 +2,7 @@ var openContextOnRightClick = function (event) {
   event.stopPropagation();
   event.preventDefault();
 
+  var appName = 'files_rightclick';
   var currentFile = $(event.target).closest('tr');
   var leftToRemove = currentFile.find('.selection').width();
 
@@ -77,21 +78,21 @@ var openContextOnRightClick = function (event) {
     };
 
     if (currentFile.attr('data-type') === 'dir') {
-      text = 'Open this folder';
+      text = t(appName, 'Open this folder');
       icon = 'filetype-folder-drag-accept';
 
-      generateNewOption('Open', 'category-app-bundles', 'Open in a new tab', function () {
+      generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in a new tab'), function () {
         window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
       });
     }
     if (mimeType === 'text/plain') {
-      text = 'Edit this file';
+      text = t(appName, 'Edit this file');
     }
     else if (mimeType.indexOf('image') >= 0) {
-      text = 'See this picture';
+      text = t(appName, 'See this picture');
       icon = 'toggle';
 
-      generateNewOption('Open', 'category-multimedia', 'Open in the gallery app', function () {
+      generateNewOption('Open', 'category-multimedia', t(appName, 'Open in the gallery app'), function () {
         window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
       });
     }
@@ -101,11 +102,11 @@ var openContextOnRightClick = function (event) {
       };
 
       if (isReading()) {
-        text = 'Stop playing';
+        text = t(appName, 'Stop playing');
         icon = 'pause';
       }
       else {
-        text = 'Start playing';
+        text = t(appName, 'Start playing');
         icon = 'play';
 
         onClick = function () {
@@ -116,7 +117,7 @@ var openContextOnRightClick = function (event) {
       }
     }
     else if (mimeType.indexOf('video') >= 0) {
-      text = 'Start watching';
+      text = t(appName, 'Start watching');
       icon = 'play';
     }
 
@@ -128,7 +129,5 @@ var openContextOnRightClick = function (event) {
   return false;
 };
 
-if ($('#filesApp').length == 1 && $('#filesApp').val() == 1) {
-  $('<style class="rightClickStyle"></style>').appendTo('head');
-  $('#fileList').contextmenu(openContextOnRightClick);
-}
+$('<style class="rightClickStyle"></style>').appendTo('head');
+$('#fileList').contextmenu(openContextOnRightClick);
