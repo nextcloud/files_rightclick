@@ -72,10 +72,18 @@ var openContextOnRightClick = function (event) {
 
     var mimeType = currentFile.attr('data-mime');
     var text = '';
-    var icon = 'edit';
+    var icon = 'toggle';
     var onClick = function () {
       currentFile.find('.filename .nametext').click();
     };
+
+    var share = currentFile.find('.filename .fileactions .action-share');
+
+    if (share.length !== 0) {
+      generateNewOption('Share', 'share', t(appName, 'Share this ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
+        share.click();
+      });
+    }
 
     if (currentFile.attr('data-type') === 'dir') {
       text = t(appName, 'Open this folder');
@@ -85,12 +93,15 @@ var openContextOnRightClick = function (event) {
         window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
       });
     }
-    if (mimeType === 'text/plain') {
+    else if (mimeType === 'text/plain') {
       text = t(appName, 'Edit this file');
+      icon = 'edit';
+    }
+    else if (mimeType === 'application/pdf') {
+      text = t(appName, 'Read this PDF');
     }
     else if (mimeType.indexOf('image') >= 0) {
       text = t(appName, 'See this picture');
-      icon = 'toggle';
 
       generateNewOption('Open', 'category-multimedia', t(appName, 'Open in the gallery app'), function () {
         window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
@@ -119,6 +130,9 @@ var openContextOnRightClick = function (event) {
     else if (mimeType.indexOf('video') >= 0) {
       text = t(appName, 'Start watching');
       icon = 'play';
+    }
+    else if (currentFile.attr('data-type') === 'file') {
+      text = t(appName, 'Open this file');
     }
 
     if (text !== '') {
