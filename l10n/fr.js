@@ -12,6 +12,8 @@ OC.L10N.register(
     "Start watching" : "Lancer la video",
     "Share this folder" : "Partager le dossier",
     "Share this file" : "Partager le fichier",
+	"Select" : "Sélectionner",
+	"Unselect" : "Désélectionner",
   },
   "nplurals=2; plural=(n > 1);"
 );

@@ -86,13 +86,16 @@ var openContextOnRightClick = function (event) {
 	if (currentFile.hasClass('selected')) {
 		menu.find('ul').html('');
 
+		generateNewOption('Check', 'category-disabled', t(appName, 'Unselect'), function () {
+			$(currentFile.find('input.selectCheckBox')).click();
+		});
+
 		$.each(selectedActionsList, function (i, selectedActions) {
 			$.each($(selectedActions).find('a'), function (j, selectedAction) {
 				var action = $(selectedAction);
 
 				if (action.is(":visible")) {
 					generateNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
-						console.log('a');
 						action.click()
 					}, false);
 				}
@@ -167,6 +170,12 @@ var openContextOnRightClick = function (event) {
 
 		if (text !== '') {
 			generateNewOption('Open', icon, text, onClick);
+		}
+
+		if (!$('#selectedActionsList').hasClass('hidden')) {
+			generateNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
+				$(currentFile.find('input.selectCheckBox')).click();
+			});
 		}
 	}
   }, 200)
