@@ -25,22 +25,35 @@ var openContextOnRightClick = function (event) {
 
     var menu = currentFile.find('.fileActionsMenu');
     var menuStyle = $('style.rightClickStyle');
+	var selectedActionsList = $('.selectedActions');
     var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
     var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
-    var generateNewOption = function (action, icon, text, onClick) {
-      menu.find('ul').prepend(
-        $('<li><a href="#" class="menuitem action action-' + action.toLowerCase() + ' permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
-          event.stopPropagation();
-          event.preventDefault();
+    var generateNewOption = function (action, icon, text, onClick, prepend) {
+	  if (prepend === undefined)
+	    prepend = true;
 
-          menu.remove();
-          currentFile.removeClass('mouseOver');
-          currentFile.removeClass('highlighted');
-          currentFile.find('.action-menu').removeClass('open');
+	  var newOption = $('<li><a href="#" class="menuitem action action-' + action.toLowerCase() + ' permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
+		event.stopPropagation();
+		event.preventDefault();
 
-          onClick();
-        })
-      );
+		menu.remove();
+		currentFile.removeClass('mouseOver');
+		currentFile.removeClass('highlighted');
+		currentFile.find('.action-menu').removeClass('open');
+
+		onClick();
+	});
+
+      if (prepend) {
+		  menu.find('ul').prepend(
+			  newOption
+		  );
+	  }
+	  else {
+		  menu.find('ul').append(
+			  newOption
+		  );
+	  }
     };
 
     menu.addClass('rightClickMenu');
@@ -70,74 +83,92 @@ var openContextOnRightClick = function (event) {
       left: left
     });
 
-    var mimeType = currentFile.attr('data-mime');
-    var text = '';
-    var icon = 'toggle';
-    var onClick = function () {
-      currentFile.find('.filename .nametext').click();
-    };
+	if (currentFile.hasClass('selected')) {
+		menu.find('ul').html('');
 
-    var share = currentFile.find('.filename .fileactions .action-share');
+		$.each(selectedActionsList, function (i, selectedActions) {
+			$.each($(selectedActions).find('a'), function (j, selectedAction) {
+				var action = $(selectedAction);
 
-    if (share.length !== 0) {
-      generateNewOption('Share', 'share', t(appName, 'Share this ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
-        share.click();
-      });
-    }
+				if (action.is(":visible")) {
+					generateNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
+						console.log('a');
+						action.click()
+					}, false);
+				}
+			});
+		});
+	}
+	else {
+		var mimeType = currentFile.attr('data-mime');
+		var text = '';
+		var icon = 'toggle';
+		var onClick = function () {
+			currentFile.find('.filename .nametext').click();
+		};
 
-    if (currentFile.attr('data-type') === 'dir') {
-      text = t(appName, 'Open this folder');
-      icon = 'filetype-folder-drag-accept';
+		var share = currentFile.find('.filename .fileactions .action-share');
 
-      generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in a new tab'), function () {
-        window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-      });
-    }
-    else if (mimeType === 'text/plain') {
-      text = t(appName, 'Edit this file');
-      icon = 'edit';
-    }
-    else if (mimeType === 'application/pdf') {
-      text = t(appName, 'Read this PDF');
-    }
-    else if (mimeType.indexOf('image') >= 0) {
-      text = t(appName, 'See this picture');
+		if (share.length !== 0) {
+			generateNewOption('Share', 'share', t(appName, 'Share this ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
+				share.click();
+			});
+		}
 
-      generateNewOption('Open', 'category-multimedia', t(appName, 'Open in the gallery app'), function () {
-        window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-      });
-    }
-    else if (mimeType.indexOf('audio') >= 0) {
-      var isReading = function () {
-        return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
-      };
+		if (currentFile.attr('data-type') === 'dir') {
+			text = t(appName, 'Open this folder');
+			icon = 'filetype-folder-drag-accept';
 
-      if (isReading()) {
-        text = t(appName, 'Stop playing');
-        icon = 'pause';
-      }
-      else {
-        text = t(appName, 'Start playing');
-        icon = 'play';
+			generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in a new tab'), function () {
+				window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
+			});
+		}
+		else if (mimeType === 'text/plain') {
+			text = t(appName, 'Edit this file');
+			icon = 'edit';
+		}
+		else if (mimeType === 'application/pdf') {
+			text = t(appName, 'Read this PDF');
+		}
+		else if (mimeType.indexOf('image') >= 0) {
+			text = t(appName, 'See this picture');
 
-        onClick = function () {
-          while (!isReading()) {
-            currentFile.find('.filename .nametext').click();
-          }
-        };
-      }
-    }
-    else if (mimeType.indexOf('video') >= 0) {
-      text = t(appName, 'Start watching');
-      icon = 'play';
-    }
-    else if (currentFile.attr('data-type') === 'file') {
-      text = t(appName, 'Open this file');
-    }
+			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in the gallery app'), function () {
+				window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
+			});
+		}
+		else if (mimeType.indexOf('audio') >= 0) {
+			var isReading = function () {
+				return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
+			};
 
-    if (text !== '') {
-      generateNewOption('Open', icon, text, onClick);
-    }
+			if (isReading()) {
+				text = t(appName, 'Stop playing');
+				icon = 'pause';
+			}
+			else {
+				text = t(appName, 'Start playing');
+				icon = 'play';
+
+				onClick = function () {
+					while (!isReading()) {
+						currentFile.find('.filename .nametext').click();
+					}
+				};
+			}
+		}
+		else if (mimeType.indexOf('video') >= 0) {
+			text = t(appName, 'Start watching');
+			icon = 'play';
+		}
+		else if (currentFile.attr('data-type') === 'file') {
+			text = t(appName, 'Open this file');
+		}
+
+		if (text !== '') {
+			generateNewOption('Open', icon, text, onClick);
+		}
+	}
   }, 200)
 
   return false;
