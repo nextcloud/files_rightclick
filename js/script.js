@@ -1,4 +1,7 @@
 var openContextOnRightClick = function (event) {
+  if ($('tbody').has(event.target).length === 0)
+  	return;
+
   event.stopPropagation();
   event.preventDefault();
 
@@ -184,4 +187,4 @@ var openContextOnRightClick = function (event) {
 };
 
 $('<style class="rightClickStyle"></style>').appendTo('head');
-$('#fileList').contextmenu(openContextOnRightClick);
+$('#app-content').contextmenu(openContextOnRightClick);
