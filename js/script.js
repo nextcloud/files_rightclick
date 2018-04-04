@@ -116,7 +116,7 @@ var openContextOnRightClick = function (event) {
 		var share = currentFile.find('.filename .fileactions .action-share');
 
 		if (share.length !== 0) {
-			generateNewOption('Share', 'share', t(appName, 'Share this ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
+			generateNewOption('Share', 'share', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
 				share.click();
 			});
 		}
@@ -125,21 +125,21 @@ var openContextOnRightClick = function (event) {
 			text = t(appName, 'Open this folder');
 			icon = 'filetype-folder-drag-accept';
 
-			generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in a new tab'), function () {
+			generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
 				window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
 			});
 		}
 		else if (mimeType === 'text/plain') {
-			text = t(appName, 'Edit this file');
+			text = t(appName, 'Edit file');
 			icon = 'edit';
 		}
 		else if (mimeType === 'application/pdf') {
-			text = t(appName, 'Read this PDF');
+			text = t(appName, 'Read PDF');
 		}
 		else if (mimeType.indexOf('image') >= 0) {
-			text = t(appName, 'See this picture');
+			text = t(appName, 'See picture');
 
-			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in the gallery app'), function () {
+			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
 				window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
 			});
 		}
@@ -149,11 +149,11 @@ var openContextOnRightClick = function (event) {
 			};
 
 			if (isReading()) {
-				text = t(appName, 'Stop playing');
+				text = t(appName, 'Stop playback');
 				icon = 'pause';
 			}
 			else {
-				text = t(appName, 'Start playing');
+				text = t(appName, 'Play');
 				icon = 'play';
 
 				onClick = function () {
@@ -164,11 +164,11 @@ var openContextOnRightClick = function (event) {
 			}
 		}
 		else if (mimeType.indexOf('video') >= 0) {
-			text = t(appName, 'Start watching');
+			text = t(appName, 'Watch');
 			icon = 'play';
 		}
 		else if (currentFile.attr('data-type') === 'file') {
-			text = t(appName, 'Open this file');
+			text = t(appName, 'Open file');
 		}
 
 		if (text !== '') {
