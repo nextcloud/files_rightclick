@@ -11,6 +11,6 @@
   "Watch" : "Video ansehen",
   "Share folder" : "Ordner teilen",
   "Share file" : "Datei teilen",
-  "Select" : "Auswählen",
-  "Unselect" : "Abwählen",
+  "Select" : "Markieren",
+  "Unselect" : "Markierung aufheben",
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
