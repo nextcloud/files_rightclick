@@ -122,7 +122,7 @@ var openContextOnRightClick = function (event) {
 		}
 
 		if (currentFile.attr('data-type') === 'dir') {
-			text = t(appName, 'Open this folder');
+			text = t(appName, 'Open folder');
 			icon = 'filetype-folder-drag-accept';
 
 			generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
@@ -187,4 +187,4 @@ var openContextOnRightClick = function (event) {
 };
 
 $('<style class="rightClickStyle"></style>').appendTo('head');
-$('#app-content').contextmenu(openContextOnRightClick);
+$('#filestable').contextmenu(openContextOnRightClick);
