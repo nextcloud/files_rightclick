@@ -187,4 +187,4 @@ var openContextOnRightClick = function (event) {
 };
 
 $('<style class="rightClickStyle"></style>').appendTo('head');
-$('#filestable').contextmenu(openContextOnRightClick);
+$('table[id*=filestable]').contextmenu(openContextOnRightClick);
