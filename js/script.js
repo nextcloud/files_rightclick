@@ -136,34 +136,28 @@ var openContextOnRightClick = function (event) {
 		else if (mimeType === 'application/pdf') {
 			text = t(appName, 'Read PDF');
 		}
-		else if (mimeType.indexOf('image') >= 0) {
+		else if (mimeType.indexOf('image') >= 0 && availableApplications.includes('gallery')) {
 			text = t(appName, 'See picture');
 
 			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
 				window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
 			});
 		}
-		else if (mimeType.indexOf('audio') >= 0) {
+		else if (mimeType.indexOf('audio') >= 0 && (availableApplications.includes('audioplayer') || availableApplications.includes('music'))) {
 			var isReading = function () {
 				return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
 			};
 
-			if (isReading()) {
-				text = t(appName, 'Stop playback');
-				icon = 'pause';
-			}
-			else {
-				text = t(appName, 'Play');
-				icon = 'play';
+			text = t(appName, 'Play/Pause');
+			icon = 'play';
 
-				onClick = function () {
-					while (!isReading()) {
-						currentFile.find('.filename .nametext').click();
-					}
-				};
-			}
+			onClick = function () {
+				if (!isReading()) {
+					currentFile.find('.filename .nametext').click();
+				}
+			};
 		}
-		else if (mimeType.indexOf('video') >= 0) {
+		else if (mimeType.indexOf('video') >= 0 && availableApplications.includes('audioplayer')) {
 			text = t(appName, 'Watch');
 			icon = 'play';
 		}
@@ -185,6 +179,17 @@ var openContextOnRightClick = function (event) {
 
   return false;
 };
+
+var availableApplications = [];
+
+$.get('/apps/files_rightclick/ajax/applications.php', function (data) {
+  try {
+    availableApplications = JSON.parse(data);
+  }
+  catch (error) {
+    availableApplications = [];
+  }
+});
 
 $('<style class="rightClickStyle"></style>').appendTo('head');
 $('table[id*=filestable]').contextmenu(openContextOnRightClick);

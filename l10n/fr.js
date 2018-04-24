@@ -8,6 +8,7 @@ OC.L10N.register(
     "See picture" : "Voir l'image",
     "Open in Gallery" : "Ouvrir dans la Galerie",
     "Play" : "Lancer la lecture",
+    "Play/Pause" : "Lecture/Pause",
     "Stop playback" : "Arrêter la lecture",
     "Watch" : "Lancer la video",
     "Share folder" : "Partager le dossier",
