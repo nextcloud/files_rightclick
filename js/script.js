@@ -32,31 +32,31 @@ var openContextOnRightClick = function (event) {
     var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
     var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
     var generateNewOption = function (action, icon, text, onClick, prepend) {
-	  if (prepend === undefined)
-	    prepend = true;
+  	  if (prepend === undefined)
+  	    prepend = true;
 
-	  var newOption = $('<li><a href="#" class="menuitem action action-' + action.toLowerCase() + ' permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
-		event.stopPropagation();
-		event.preventDefault();
+  	  var newOption = $('<li><a href="#" class="menuitem action permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
+    		event.stopPropagation();
+    		event.preventDefault();
 
-		menu.remove();
-		currentFile.removeClass('mouseOver');
-		currentFile.removeClass('highlighted');
-		currentFile.find('.action-menu').removeClass('open');
+    		menu.remove();
+    		currentFile.removeClass('mouseOver');
+    		currentFile.removeClass('highlighted');
+    		currentFile.find('.action-menu').removeClass('open');
 
-		onClick();
-	});
+    		onClick();
+    	});
 
       if (prepend) {
-		  menu.find('ul').prepend(
-			  newOption
-		  );
-	  }
-	  else {
-		  menu.find('ul').append(
-			  newOption
-		  );
-	  }
+  		  menu.find('ul').prepend(
+  			  newOption
+  		  );
+  	  }
+  	  else {
+  		  menu.find('ul').append(
+  			  newOption
+  		  );
+  	  }
     };
 
     menu.addClass('rightClickMenu');
