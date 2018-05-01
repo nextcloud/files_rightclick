@@ -3,183 +3,103 @@ var RightClick = RightClick || {};
 (function(window, $, exports, undefined) {
     'use strict';
 
-    exports.openContextOnRightClick = function (event) {
-      if ($('tbody').has(event.target).length === 0)
-      	return;
+    // Object where all options are listed for one (sub)menu
+    exports.Options = function (options) {
+        this.options = {};
+        this.nbr = 0;
 
-      event.stopPropagation();
-      event.preventDefault();
+        // Add one or more options
+        this.add = function (options) {
+            if (typeof options === 'string' || typeof options === 'number')
+                options = new exports.Option(options);
 
-      var appName = 'files_rightclick';
-      var currentFile = $(event.target).closest('tr');
-      var leftToRemove = currentFile.find('.selection').width();
+            if (options instanceof exports.Option)
+                this.options[this.nbr++] = options;
+            else if (options !== undefined && options instanceof Object) {
+                for (var name in options) {
+                    var option = options[name];
 
-      if (currentFile.find('.fileActionsMenu').length != 0) {
-        currentFile.find('.fileActionsMenu').remove();
-        currentFile.removeClass('mouseOver');
-        currentFile.removeClass('highlighted');
-        currentFile.find('.action-menu').removeClass('open');
+                    if (typeof option !== 'function') {
+                        if (typeof option === 'string' || typeof option === 'number')
+                            option = new exports.Option(option);
 
-        return false;
-      }
+                        if (option instanceof exports.Option) {
+                            this.options[name] = option;
+                            this.nbr++;
+                        }
+                    }
+                }
+            }
 
-      setTimeout(function () {
-        if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
-          $(event.target).click();
-          return false;
-        }
-        else
-          currentFile.find('.action-menu').click();
-
-        var menu = currentFile.find('.fileActionsMenu');
-        var menuStyle = $('style.rightClickStyle');
-    	var selectedActionsList = $('.selectedActions');
-        var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
-        var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
-        var generateNewOption = function (action, icon, text, onClick, prepend) {
-      	  if (prepend === undefined)
-      	    prepend = true;
-
-      	  var newOption = $('<li><a href="#" class="menuitem action permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
-        		event.stopPropagation();
-        		event.preventDefault();
-
-        		menu.remove();
-        		currentFile.removeClass('mouseOver');
-        		currentFile.removeClass('highlighted');
-        		currentFile.find('.action-menu').removeClass('open');
-
-        		onClick();
-        	});
-
-          if (prepend) {
-      		  menu.find('ul').prepend(
-      			  newOption
-      		  );
-      	  }
-      	  else {
-      		  menu.find('ul').append(
-      			  newOption
-      		  );
-      	  }
+            return this;
         };
 
-        menu.addClass('rightClickMenu');
+        // Generate all options html
+        this.generate = function () {
+            var ul = $('<ul>');
 
-        if (left < (-leftToRemove)) {
-          left = (-leftToRemove);
+            for (var name in this.options) {
+                var li = this.options[name].generate();
 
-          if ((event.pageX - currentFile.offset().left) <= 11)
-            menuStyle.text('.fileActionsMenu.rightClickMenu{border-top-left-radius:0} .fileActionsMenu.rightClickMenu:after{left:0}');
-          else
-            menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (event.pageX - currentFile.offset().left) + 'px}');
-        } else if (left + menu.width() + leftToRemove + 10 > currentFile.width()) {
-          left = currentFile.width() - leftToRemove - menu.width() - 10;
+                li.addClass('action-' + name);
+                ul.append(li);
+            }
 
-          if ((event.pageX - currentFile.offset().left - leftToRemove - left) >= (menu.width() - 11))
-            menuStyle.text('.fileActionsMenu.rightClickMenu{border-top-right-radius:0} .fileActionsMenu.rightClickMenu:after{right:0}');
-          else
-            menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (event.pageX - currentFile.offset().left - leftToRemove - left) + 'px}');
-        } else
-          menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (menu.width() / 2) + 'px}');
+            return ul;
+        }
 
-        menu.css({
-          right: 'auto',
-          top: top,
-          left: left
-        });
 
-    	if (currentFile.hasClass('selected')) {
-    		menu.find('ul').html('');
+        this.add(options);
+    }
 
-    		generateNewOption('Check', 'category-disabled', t(appName, 'Unselect'), function () {
-    			$(currentFile.find('input.selectCheckBox')).click();
-    		});
+    exports.Option = function (text, icon, callback, subOptions) {
+        this.text = text;
+        this.icon = icon;
+        this.callback = callback;
+        this.subOptions = subOptions;
 
-    		$.each(selectedActionsList, function (i, selectedActions) {
-    			$.each($(selectedActions).find('a'), function (j, selectedAction) {
-    				var action = $(selectedAction);
+        this.generate = function () {
+            return $('<li>', {
+                'onClick': callback
+            }).append(
+                $('<a>').append(
+                    $('<span>', {
+                        'class': this.icon
+                    })
+                ).append(
+                    $('<span>', {
+                        'text': this.text
+                    })
+                )
+            )
+        };
+    }
 
-    				if (action.is(":visible")) {
-    					generateNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
-    						action.click()
-    					}, false);
-    				}
-    			});
-    		});
-    	}
-    	else {
-    		var mimeType = currentFile.attr('data-mime');
-    		var text = '';
-    		var icon = 'toggle';
-    		var onClick = function () {
-    			currentFile.find('.filename .nametext').click();
-    		};
+    exports.ContextMenu = function (context, options) {
+        this.context = context;
+        this.options = options || new exports.Options();
 
-    		var share = currentFile.find('.filename .fileactions .action-share');
+        if (context === undefined)
+            return undefined;
 
-    		if (share.length !== 0) {
-    			generateNewOption('Share', 'share', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
-    				share.click();
-    			});
-    		}
+        var onClick = function (event) {
+            options = $.data($(this)[0], 'right_click-options');
 
-    		if (currentFile.attr('data-type') === 'dir') {
-    			text = t(appName, 'Open folder');
-    			icon = 'filetype-folder-drag-accept';
+            if (typeof options === "function")
+                options = options(event);
 
-    			generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
-    				window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-    			});
-    		}
-    		else if (mimeType === 'text/plain') {
-    			text = t(appName, 'Edit file');
-    			icon = 'edit';
-    		}
-    		else if (mimeType === 'application/pdf') {
-    			text = t(appName, 'Read PDF');
-    		}
-    		else if (mimeType.indexOf('image') >= 0 && availableApplications.includes('gallery')) {
-    			text = t(appName, 'See picture');
+            var div = $('<div>', {
+                'class': 'fileActionsMenu bubble open menu rightClickMenu'
+            }).append(options.generate());
 
-    			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
-    				window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-    			});
-    		}
-    		else if (mimeType.indexOf('audio') >= 0 && (availableApplications.includes('audioplayer') || availableApplications.includes('music'))) {
-    			var isReading = function () {
-    				return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
-    			};
+            div.appendTo(context);
 
-    			text = t(appName, 'Play/Pause');
-    			icon = 'play';
+            return false;
+        }
 
-    			onClick = function () {
-    				if (!isReading()) {
-    					currentFile.find('.filename .nametext').click();
-    				}
-    			};
-    		}
-    		else if (mimeType.indexOf('video') >= 0 && availableApplications.includes('audioplayer')) {
-    			text = t(appName, 'Watch');
-    			icon = 'play';
-    		}
-    		else if (currentFile.attr('data-type') === 'file') {
-    			text = t(appName, 'Open file');
-    		}
-
-    		if (text !== '') {
-    			generateNewOption('Open', icon, text, onClick);
-    		}
-
-    		if (!$('#selectedActionsList').hasClass('hidden')) {
-    			generateNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
-    				$(currentFile.find('input.selectCheckBox')).click();
-    			});
-    		}
-    	}
-      }, 200)
-
-      return false;
+        $.data(this.context[0], 'right_click-options', this.options);
+        this.context.contextmenu(onClick);
     };
+
+    $('<style class="rightClickStyle"></style>').appendTo('head');
 })(window, jQuery, RightClick);
