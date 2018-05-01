@@ -36,3 +36,4 @@
 - [ ] Add a context menu in each icon apps
 - [ ] Add sub menu compatibility in context menu
 - [ ] Fork the app (with a different name) and allow any app to create its own context menu(s)
+- [ ] Backport to NC 12

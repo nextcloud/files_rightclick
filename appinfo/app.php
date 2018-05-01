@@ -1,18 +1,19 @@
 <?php
 
-  $eventDispatcher = \OC::$server->getEventDispatcher();
+$includes = [
+    'Files' => 'files',
+    'Files_Sharing' => 'files',
+];
 
-  $eventDispatcher->addListener(
-    'OCA\Files::loadAdditionalScripts',
-    function () {
-      \OCP\Util::addScript('files_rightclick', 'script');
-    }
-  );
+\OCP\Util::addScript('files_rightclick', 'script');
 
-  $eventDispatcher->addListener(
-    'OCA\Files_Sharing::loadAdditionalScripts',
-    function () {
-      \OCP\Util::addScript('files_rightclick', 'script');
-    }
-  );
-?>
+$eventDispatcher = \OC::$server->getEventDispatcher();
+
+foreach ($includes as $app => $include) {
+    $eventDispatcher->addListener(
+        'OCA\\'.$app.'::loadAdditionalScripts',
+        function () use ($include) {
+            \OCP\Util::addScript('files_rightclick', $include);
+        }
+    );
+}
