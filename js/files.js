@@ -14,7 +14,7 @@ var RightClick = RightClick || {};
       }
     });
 
-    new RightClick.ContextMenu($('table[id*=filestable]'), function (event) {
+    new RightClick.ContextMenu($('tbody[id*=fileList]'), function (event) {
         if ($('tbody').has(event.target).length === 0)
           return;
 

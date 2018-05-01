@@ -83,16 +83,28 @@ var RightClick = RightClick || {};
             return undefined;
 
         var onClick = function (event) {
-            options = $.data($(this)[0], 'right_click-options');
+            var $this = $(this);
+            options = $.data($this[0], 'right_click-options');
 
             if (typeof options === "function")
                 options = options(event);
 
             var div = $('<div>', {
-                'class': 'fileActionsMenu bubble open menu rightClickMenu'
+                'class': 'bubble open rightClickMenu'
             }).append(options.generate());
 
-            div.appendTo(context);
+            div.appendTo($this);
+
+            var top = event.pageY + $this.position().top - $this.offset().top + 15;
+            var left = event.pageX + $this.position().left - $this.offset().left - (div.width() / 2);
+
+            div.css({
+                'top': top,
+                'left': left,
+                'right': 'auto'
+            });
+
+            $('style.rightClickStyle').text('.rightClickMenu:after{transform:translateX(-50%);left:' + (div.width() / 2) + 'px}');
 
             return false;
         }
