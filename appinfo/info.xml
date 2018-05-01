@@ -10,8 +10,13 @@
     <author mail="samy@nastuzzi.fr" homepage="https://github.com/NastuzziSamy/files_rightclick.git">NASTUZZI Samy</author>
     <namespace>FilesRightClick</namespace>
     <category>files</category>
+    <category>tools</category>
+    <website>https://github.com/NastuzziSamy/files_rightclick</website>
+    <repository>https://github.com/NastuzziSamy/files_rightclick</repository>
     <bugs>https://github.com/NastuzziSamy/files_rightclick/issues</bugs>
+    <documentation>https://github.com/NastuzziSamy/files_rightclick</documentation>
+    <screenshot>https://raw.githubusercontent.com/NastuzziSamy/files_rightclick/master/screenshots/picture.png</screenshot>
     <dependencies>
-        <nextcloud min-version="12" max-version="14"/>
+        <nextcloud min-version="13" max-version="14"/>
     </dependencies>
 </info>

@@ -17,6 +17,22 @@
   Add "Edit this file" option to edit the file
 ![alt text](https://raw.githubusercontent.com/NastuzziSamy/files_rightclick/master/screenshots/file.png)
 
-## Other file types are handled
+## Other file types are handled (if an app can open it)
 - Audio files: start and stop playing
 - Video files: start watching
+
+# TODOs
+- [x] Add a context menu for files applications (Files and Files_Sharing)
+- [ ] Add custom options for each files:
+    - [x] Open option (detect the file type)
+    - [x] Check or uncheck option
+    - [x] Adapt sharing and copy/move options with selected files
+    - [ ] WebDAV link option
+- [x] Detect if an app is installed
+- [x] Split js files
+- [x] Use strict mode
+- [ ] Create a context menu generator
+- [ ] Add a context menu to create files or directories
+- [ ] Add a context menu in each icon apps
+- [ ] Add sub menu compatibility in context menu
+- [ ] Fork the app (with a different name) and allow any app to create its own context menu(s)
