@@ -18,9 +18,6 @@ var RightClick = RightClick || {};
         if ($('tbody').has(event.target).length === 0)
           return;
 
-        event.stopPropagation();
-        event.preventDefault();
-
         var appName = 'files_rightclick';
         var currentFile = $(event.target).closest('tr');
         var leftToRemove = currentFile.find('.selection').width();
@@ -203,5 +200,5 @@ var RightClick = RightClick || {};
         }
 
         return options;
-    });
+    }, $('#controls').css('z-index') - 1);
 })(window, jQuery, RightClick);
