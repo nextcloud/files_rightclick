@@ -57,13 +57,20 @@ var RightClick = RightClick || {};
             return true;
         }
 
+        this.isFirstDisabled = function () {
+            if (this.nbr === 0)
+                return true;
+            else
+                return this.options[Object.keys(this.options)[0]].isDisabled();
+        }
+
         this.add(options);
     }
 
-    exports.Option = function (text, icon, callback, subOptions) {
+    exports.Option = function (text, icon, onClick, subOptions) {
         this.text = text;
         this.icon = icon;
-        this.callback = callback;
+        this.onClick = onClick;
         this.subOptions = subOptions;
 
         this.generate = function () {
@@ -75,7 +82,7 @@ var RightClick = RightClick || {};
                 'text': this.text
             });
 
-            if (this.callback === undefined) {
+            if (this.onClick === undefined) {
                 a.attr('disabled', true).css({
                     'cursor': 'default',
                     'background-color': '#AAA'
@@ -85,19 +92,16 @@ var RightClick = RightClick || {};
                 textSpan.css('cursor', 'default');
             }
 
-            return $('<li>', {
-                'onClick': this.callback
-            }).append(a.append(iconSpan).append(textSpan));
+            return $('<li>').on('click', onClick).append(a.append(iconSpan).append(textSpan));
         };
 
         this.isDisabled = function () {
-            return this.callback === undefined;
+            return this.onClick === undefined;
         }
     }
 
     exports.menus = [];
     exports.Menu = function (context, options, zIndex, onClose) {
-        this.RightClick = exports;
         this.context = $(context);
         this.options = options || new exports.Options();
         this.params = {
@@ -105,6 +109,7 @@ var RightClick = RightClick || {};
         };
         this.onClose = onClose;
         this.isOpened = false;
+        var menu = this;
 
         if (context === undefined)
             return undefined;
@@ -114,11 +119,10 @@ var RightClick = RightClick || {};
             event.preventDefault();
 
             var $this = $(this);
-            var menu = $.data($this[0], 'right_click');
             var options = menu.options;
             var params = menu.params;
 
-            if (menu.RightClick.closeAllMenus() === false)
+            if (exports.closeAllMenus() === false)
                 return false;
 
             menu.attachedEvent = event;
@@ -151,7 +155,7 @@ var RightClick = RightClick || {};
             if (optionsDisabled)
                 div.css('background-color', '#AAA');
 
-            $('style.rightClickStyle').text('.rightClickMenu:after{transform:translateX(-50%);left:' + (div.width() / 2) + 'px;' + (optionsDisabled ? 'border-bottom-color:#AAA;' : '') + '}');
+            $('style.rightClickStyle').text('.rightClickMenu:after{transform:translateX(-50%);left:' + (div.width() / 2) + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
 
             return false;
         }
@@ -171,9 +175,8 @@ var RightClick = RightClick || {};
             return true;
         }
 
-        $.data(this.context[0], 'right_click', this);
         this.context.contextmenu(onClick);
-        this.RightClick.menus.push(this);
+        exports.menus.push(this);
     };
 
     exports.closeAllMenus = function () {

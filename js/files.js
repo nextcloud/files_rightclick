@@ -15,12 +15,10 @@ var RightClick = RightClick || {};
     });
 
     new RightClick.Menu($('tbody[id*=fileList]'), function (event) {
-        if ($('tbody').has(event.target).length === 0)
-          return;
-
         var appName = 'files_rightclick';
         var currentFile = $(event.target).closest('tr');
         var leftToRemove = currentFile.find('.selection').width();
+        var options = new RightClick.Options();
 
         if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
             $(event.target).click();
@@ -36,34 +34,48 @@ var RightClick = RightClick || {};
         var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
         var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
         var generateNewOption = function (action, icon, text, onClick, prepend) {
-        if (prepend === undefined)
-          prepend = true;
+            options.add(new RightClick.Option(text, 'icon icon-' + icon, function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
 
-        var newOption = $('<li><a href="#" class="menuitem action permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
-            event.stopPropagation();
-            event.preventDefault();
+                    menu.remove();
+                    currentFile.removeClass('mouseOver');
+                    currentFile.removeClass('highlighted');
+                    currentFile.find('.action-menu').removeClass('open');
 
-            menu.remove();
-            currentFile.removeClass('mouseOver');
-            currentFile.removeClass('highlighted');
-            currentFile.find('.action-menu').removeClass('open');
-
-            onClick();
-        });
-
-        if (prepend) {
-            menu.find('ul').prepend(
-                newOption
+                    onClick();
+                })
             );
-        }
-        else {
-            menu.find('ul').append(
-                newOption
-            );
-        }
+
+            /*
+            if (prepend === undefined)
+              prepend = true;
+
+            var newOption = $('<li><a href="#" class="menuitem action permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+
+                menu.remove();
+                currentFile.removeClass('mouseOver');
+                currentFile.removeClass('highlighted');
+                currentFile.find('.action-menu').removeClass('open');
+
+                onClick();
+            });
+
+            if (prepend) {
+                menu.find('ul').prepend(
+                    newOption
+                );
+            }
+            else {
+                menu.find('ul').append(
+                    newOption
+                );
+            }*/
         };
 
-        menu.addClass('rightClickMenu');
+        //menu.addClass('rightClickMenu');
         menu.css('visibility', 'hidden');
 
         if (left < (-leftToRemove)) {
@@ -130,7 +142,7 @@ var RightClick = RightClick || {};
                 text = t(appName, 'Open folder');
                 icon = 'filetype-folder-drag-accept';
 
-                generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
+                generateNewOption('NewTab', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
                     window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
                 });
             }
@@ -144,7 +156,7 @@ var RightClick = RightClick || {};
             else if (mimeType.indexOf('image') >= 0 && availableApplications.includes('gallery')) {
                 text = t(appName, 'See picture');
 
-                generateNewOption('Open', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
+                generateNewOption('Gallery', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
                     window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
                 });
             }
@@ -180,17 +192,16 @@ var RightClick = RightClick || {};
                 });
             }
         }
-
-        var options = new RightClick.Options();
-
+/*
         for (var key in menu.find('li')) {
-            if (menu.hasOwnProperty(key)) {
+            if (!isNaN(key)) {
                 var spans = $($(menu.find('li')[key]).find('span'));
 
+                console.log($(menu.find('li')[key]));
                 options.add(new RightClick.Option($(spans[1]).text(), $(spans[0]).attr('class')), $(menu.find('li')[key]).onClick);
             }
         }
-
+*/
         return options;
     }, $('#controls').css('z-index') - 1);
 })(window, jQuery, RightClick);
