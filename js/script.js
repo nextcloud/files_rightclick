@@ -183,8 +183,8 @@ var RightClick = RightClick || {};
 
             div.appendTo(context);
 
-            var top = event.pageY + context.position().top - context.offset().top + 15;
-            var left = event.pageX + context.position().left - context.offset().left - (div.width() / 2) - 5;
+            var top = event.pageY + delimiter.position().top - delimiter.offset().top + 15;
+            var left = event.pageX + delimiter.position().left - delimiter.offset().left - (div.width() / 2) - 5;
             var arrow = (div.width() / 2);
             var space = div.outerWidth(true) - div.innerWidth();
 
@@ -198,8 +198,8 @@ var RightClick = RightClick || {};
 
                 left = 0;
             }
-            else if (left + div.outerWidth(true) >= context.width()) {
-                var newLeft = context.width() - div.outerWidth(true) - 1;
+            else if (left + div.outerWidth(true) >= delimiter.width()) {
+                var newLeft = delimiter.width() - div.outerWidth(true) - 1;
                 arrow += left - newLeft;
 
                 if (arrow > div.width() - space) {

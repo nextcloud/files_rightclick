@@ -3,9 +3,9 @@
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>files_rightclick</id>
     <name>Files Right Click</name>
-    <summary>Add a simple right click menu on the files Nextcloud app</summary>
-    <description><![CDATA[Not anymore useful to click on the 3 dots button to popup the file menu, now right click on a specific file where you want to access to its menu to simply show it.]]></description>
-    <version>0.7.0</version>
+    <summary>Add a rightclick menu generator for any Nextcloud apps</summary>
+    <description><![CDATA[This app will allow users but also developers to have a right click menu. Simply use the RightClick object to create quickly and easly menus. Already files app got a right click menu]]></description>
+    <version>0.8.0</version>
     <licence>AGPL</licence>
     <author mail="samy@nastuzzi.fr" homepage="https://github.com/NastuzziSamy/files_rightclick.git">NASTUZZI Samy</author>
     <namespace>FilesRightClick</namespace>
