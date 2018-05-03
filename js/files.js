@@ -14,7 +14,7 @@ var RightClick = RightClick || {};
       }
     });
 
-    new RightClick.ContextMenu($('tbody[id*=fileList]'), function (event) {
+    new RightClick.Menu($('tbody[id*=fileList]'), function (event) {
         if ($('tbody').has(event.target).length === 0)
           return;
 
@@ -22,17 +22,9 @@ var RightClick = RightClick || {};
         var currentFile = $(event.target).closest('tr');
         var leftToRemove = currentFile.find('.selection').width();
 
-        if (currentFile.find('.fileActionsMenu').length != 0) {
-          currentFile.find('.fileActionsMenu').remove();
-          currentFile.removeClass('mouseOver');
-          currentFile.removeClass('highlighted');
-          currentFile.find('.action-menu').removeClass('open');
-
-          return false;
-        }
-
         if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
             $(event.target).click();
+
             return false;
         }
         else
@@ -192,10 +184,10 @@ var RightClick = RightClick || {};
         var options = new RightClick.Options();
 
         for (var key in menu.find('li')) {
-            if (!isNaN(key)) {
+            if (menu.hasOwnProperty(key)) {
                 var spans = $($(menu.find('li')[key]).find('span'));
 
-                options.add(new RightClick.Option($(spans[1]).text(), $(spans[0]).attr('class')));
+                options.add(new RightClick.Option($(spans[1]).text(), $(spans[0]).attr('class')), $(menu.find('li')[key]).onClick);
             }
         }
 

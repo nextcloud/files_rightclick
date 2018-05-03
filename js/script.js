@@ -95,12 +95,16 @@ var RightClick = RightClick || {};
         }
     }
 
-    exports.ContextMenu = function (context, options, zIndex) {
-        this.context = context;
+    exports.menus = [];
+    exports.Menu = function (context, options, zIndex, onClose) {
+        this.RightClick = exports;
+        this.context = $(context);
         this.options = options || new exports.Options();
         this.params = {
             'z-index': zIndex || 100
         };
+        this.onClose = onClose;
+        this.isOpened = false;
 
         if (context === undefined)
             return undefined;
@@ -110,8 +114,15 @@ var RightClick = RightClick || {};
             event.preventDefault();
 
             var $this = $(this);
-            var options = $.data($this[0], 'right_click-options');
-            var params = $.data($this[0], 'right_click-params');
+            var menu = $.data($this[0], 'right_click');
+            var options = menu.options;
+            var params = menu.params;
+
+            if (menu.RightClick.closeAllMenus() === false)
+                return false;
+
+            menu.attachedEvent = event;
+            menu.isOpened = true;
 
             if (typeof options === "function")
                 options = options(event);
@@ -145,10 +156,36 @@ var RightClick = RightClick || {};
             return false;
         }
 
-        $.data(this.context[0], 'right_click-options', this.options);
-        $.data(this.context[0], 'right_click-params', this.params);
+        this.close = function () {
+            var opened = this.context.find('.rightClickMenu');
+
+            if (opened.length > 0) {
+                if (this.onClose) {
+                    if (this.onClose(this.attachedEvent, this.context) === false)
+                        return false;
+                }
+
+                opened.remove();
+            }
+
+            return true;
+        }
+
+        $.data(this.context[0], 'right_click', this);
         this.context.contextmenu(onClick);
+        this.RightClick.menus.push(this);
     };
+
+    exports.closeAllMenus = function () {
+        for (var i in exports.menus) {
+            if (exports.menus.hasOwnProperty(i)) {
+                if (exports.menus[i].close() === false)
+                    return false;
+            }
+        }
+
+        return true;
+    }
 
     $('<style class="rightClickStyle"></style>').appendTo('head');
 })(window, jQuery, RightClick);
