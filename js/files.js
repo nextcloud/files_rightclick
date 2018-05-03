@@ -34,18 +34,25 @@ var RightClick = RightClick || {};
         var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
         var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
         var generateNewOption = function (action, icon, text, onClick, prepend) {
-            options.add(new RightClick.Option(text, 'icon icon-' + icon, function (event) {
-                    event.stopPropagation();
-                    event.preventDefault();
+            if (prepend === undefined)
+                prepend = true;
 
-                    menu.remove();
-                    currentFile.removeClass('mouseOver');
-                    currentFile.removeClass('highlighted');
-                    currentFile.find('.action-menu').removeClass('open');
+            var option = new RightClick.Option(action, text, 'icon icon-' + icon, function (event) {
+                event.stopPropagation();
+                event.preventDefault();
 
-                    onClick();
-                })
-            );
+                menu.remove();
+                currentFile.removeClass('mouseOver');
+                currentFile.removeClass('highlighted');
+                currentFile.find('.action-menu').removeClass('open');
+
+                onClick();
+            });
+
+            if (prepend)
+                options.prepend(option);
+            else
+                options.append(option);
 
             /*
             if (prepend === undefined)

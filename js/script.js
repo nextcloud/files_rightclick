@@ -5,34 +5,49 @@ var RightClick = RightClick || {};
 
     // Object where all options are listed for one (sub)menu
     exports.Options = function (options) {
-        this.options = {};
-        this.nbr = 0;
+        this.options = [];
+
+        this.getIndexFromOptionName = function (name) {
+            return this.getNbrOfOptions(); // TODO
+        }
 
         // Add one or more options
-        this.add = function (options) {
+        this.add = function (options, index) {
+            if (!(typeof index === 'number'))
+                index = this.getIndexFromOptionName(index);
+
+            if (index === undefined)
+                index = this.getNbrOfOptions();
+
             if (typeof options === 'string' || typeof options === 'number')
                 options = new exports.Option(options);
 
             if (options instanceof exports.Option)
-                this.options[this.nbr++] = options;
-            else if (options !== undefined && options instanceof Object) {
+                this.options.splice(index, 0, options);
+            else if (options !== undefined && Array.isArray(options)) {
                 for (var name in options) {
                     var option = options[name];
 
                     if (typeof option !== 'function') {
                         if (typeof option === 'string' || typeof option === 'number')
                             option = new exports.Option(option);
-
-                        if (option instanceof exports.Option) {
-                            this.options[name] = option;
-                            this.nbr++;
-                        }
                     }
+
+                    if (option instanceof exports.Option)
+                        this.options.splice(index, 0, option);
                 }
             }
 
             return this;
         };
+
+        this.prepend = function (options) {
+            return this.add(options, 0);
+        }
+
+        this.append = function (options) {
+            return this.add(options, this.getNbrOfOptions());
+        }
 
         // Generate all options html
         this.generate = function () {
@@ -48,6 +63,10 @@ var RightClick = RightClick || {};
             return ul;
         }
 
+        this.getNbrOfOptions = function () {
+            return this.options.length;
+        }
+
         this.isDisabled = function () {
             for (var name in this.options) {
                 if (!this.options[name].isDisabled())
@@ -58,7 +77,7 @@ var RightClick = RightClick || {};
         }
 
         this.isFirstDisabled = function () {
-            if (this.nbr === 0)
+            if (this.getNbrOfOptions() === 0)
                 return true;
             else
                 return this.options[Object.keys(this.options)[0]].isDisabled();
@@ -67,7 +86,8 @@ var RightClick = RightClick || {};
         this.add(options);
     }
 
-    exports.Option = function (text, icon, onClick, subOptions) {
+    exports.Option = function (name, text, icon, onClick, subOptions) {
+        this.namee = name;
         this.text = text;
         this.icon = icon;
         this.onClick = onClick;
@@ -92,7 +112,9 @@ var RightClick = RightClick || {};
                 textSpan.css('cursor', 'default');
             }
 
-            return $('<li>').on('click', onClick).append(a.append(iconSpan).append(textSpan));
+            return $('<li>', {
+                'class': 'action action-' + name
+            }).on('click', onClick).append(a.append(iconSpan).append(textSpan));
         };
 
         this.isDisabled = function () {
@@ -131,11 +153,12 @@ var RightClick = RightClick || {};
             if (typeof options === "function")
                 options = options(event);
 
-            if (options.nbr === 0)
+            if (options.getNbrOfOptions() === 0)
                 return;
 
             var div = $('<div>', {
-                'class': 'bubble open rightClickMenu'
+                'id': 'rightClickMenu',
+                'class': 'bubble open'
             }).append(options.generate());
 
             div.appendTo($this);
@@ -155,13 +178,13 @@ var RightClick = RightClick || {};
             if (optionsDisabled)
                 div.css('background-color', '#AAA');
 
-            $('style.rightClickStyle').text('.rightClickMenu:after{transform:translateX(-50%);left:' + (div.width() / 2) + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
+            $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + (div.width() / 2) + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
 
             return false;
         }
 
         this.close = function () {
-            var opened = this.context.find('.rightClickMenu');
+            var opened = this.context.find('#rightClickMenu');
 
             if (opened.length > 0) {
                 if (this.onClose) {
@@ -191,4 +214,5 @@ var RightClick = RightClick || {};
     }
 
     $('<style class="rightClickStyle"></style>').appendTo('head');
+    $('body').on('click', exports.closeAllMenus).contextmenu(exports.closeAllMenus);
 })(window, jQuery, RightClick);
