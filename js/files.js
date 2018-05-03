@@ -23,13 +23,7 @@ var RightClick = RightClick || {};
         var appName = 'files_rightclick';
         var options = new RightClick.Options();
 
-        if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
-            $(event.target).click();
-
-            return false;
-        }
-        else
-            currentFile.find('.action-menu').click();
+        currentFile.find('.action-menu').click();
 
         var menu = currentFile.find('.fileActionsMenu');
         var menuStyle = $('style.rightClickStyle');
@@ -56,9 +50,8 @@ var RightClick = RightClick || {};
                 options.append(option);
         };
 
-        //menu.addClass('rightClickMenu');
         menu.css('visibility', 'hidden');
-        
+
         if (currentFile.hasClass('selected')) {
             menu.find('ul').html('');
 
@@ -148,16 +141,26 @@ var RightClick = RightClick || {};
                 });
             }
         }
-/*
+
         for (var key in menu.find('li')) {
             if (!isNaN(key)) {
-                var spans = $($(menu.find('li')[key]).find('span'));
+                var li = $(menu.find('li')[key]);
+                var spans = $(li.find('span'));
 
-                console.log($(menu.find('li')[key]));
-                options.add(new RightClick.Option($(spans[1]).text(), $(spans[0]).attr('class')), $(menu.find('li')[key]).onClick);
+                options.append(new RightClick.Option($(li.find('a')).attr('data-action'), $(spans[1]).text(), $(spans[0]).attr('class'), function (event, option) {
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    $($('.fileActionsMenu').find('a[data-action="' + option.name + '"]')).click();
+                }));
             }
         }
-*/
+
+        setTimeout(function () {
+            currentFile.find('.action-menu').click();
+            $('.fileActionsMenu').css('visibility', 'hidden');
+        }, 250);
+
         return options;
     }, $('#controls').css('z-index') - 1).setContext(function (event) {
         return $(event.target).closest('tr');

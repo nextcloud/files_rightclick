@@ -87,15 +87,16 @@ var RightClick = RightClick || {};
     }
 
     exports.Option = function (name, text, icon, onClick, subOptions) {
-        this.namee = name;
+        this.name = name;
         this.text = text;
         this.icon = icon;
         this.onClick = onClick;
         this.subOptions = subOptions;
+        var option = this;
 
         this.generate = function () {
             var a = $('<a>', {
-                'class': 'action action-' + name
+                'class': 'action action-' + this.name.toLowerCase()
             });
             var iconSpan = $('<span>', {
                 'class': this.icon
@@ -114,7 +115,14 @@ var RightClick = RightClick || {};
                 textSpan.css('cursor', 'default');
             }
 
-            return $('<li>').on('click', onClick).append(a.append(iconSpan).append(textSpan));
+            return $('<li>').on('click', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+
+                exports.closeAllMenus();
+
+                onClick(event, option);
+            }).append(a.append(iconSpan).append(textSpan));
         };
 
         this.isDisabled = function () {
