@@ -5,7 +5,7 @@ var RightClick = RightClick || {};
 
     var availableApplications = [];
 
-    $.get('/apps/files_rightclick/ajax/applications.php', function (data) {
+    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications.php'), function (data) {
       try {
         availableApplications = JSON.parse(data);
       }
