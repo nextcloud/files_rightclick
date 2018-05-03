@@ -3,183 +3,266 @@ var RightClick = RightClick || {};
 (function(window, $, exports, undefined) {
     'use strict';
 
-    exports.openContextOnRightClick = function (event) {
-      if ($('tbody').has(event.target).length === 0)
-      	return;
+    // Object where all options are listed for one (sub)menu
+    exports.Options = function (options) {
+        this.options = [];
 
-      event.stopPropagation();
-      event.preventDefault();
-
-      var appName = 'files_rightclick';
-      var currentFile = $(event.target).closest('tr');
-      var leftToRemove = currentFile.find('.selection').width();
-
-      if (currentFile.find('.fileActionsMenu').length != 0) {
-        currentFile.find('.fileActionsMenu').remove();
-        currentFile.removeClass('mouseOver');
-        currentFile.removeClass('highlighted');
-        currentFile.find('.action-menu').removeClass('open');
-
-        return false;
-      }
-
-      setTimeout(function () {
-        if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
-          $(event.target).click();
-          return false;
+        this.getIndexFromOptionName = function (name) {
+            return this.getNbrOfOptions(); // TODO
         }
-        else
-          currentFile.find('.action-menu').click();
 
-        var menu = currentFile.find('.fileActionsMenu');
-        var menuStyle = $('style.rightClickStyle');
-    	var selectedActionsList = $('.selectedActions');
-        var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
-        var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
-        var generateNewOption = function (action, icon, text, onClick, prepend) {
-      	  if (prepend === undefined)
-      	    prepend = true;
+        // Add one or more options
+        this.add = function (options, index) {
+            if (!(typeof index === 'number'))
+                index = this.getIndexFromOptionName(index);
 
-      	  var newOption = $('<li><a href="#" class="menuitem action permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
-        		event.stopPropagation();
-        		event.preventDefault();
+            if (index === undefined)
+                index = this.getNbrOfOptions();
 
-        		menu.remove();
-        		currentFile.removeClass('mouseOver');
-        		currentFile.removeClass('highlighted');
-        		currentFile.find('.action-menu').removeClass('open');
+            if (typeof options === 'string' || typeof options === 'number')
+                options = new exports.Option(options);
 
-        		onClick();
-        	});
+            if (options instanceof exports.Option)
+                this.options.splice(index, 0, options);
+            else if (options !== undefined && Array.isArray(options)) {
+                for (var name in options) {
+                    var option = options[name];
 
-          if (prepend) {
-      		  menu.find('ul').prepend(
-      			  newOption
-      		  );
-      	  }
-      	  else {
-      		  menu.find('ul').append(
-      			  newOption
-      		  );
-      	  }
+                    if (typeof option !== 'function') {
+                        if (typeof option === 'string' || typeof option === 'number')
+                            option = new exports.Option(option);
+                    }
+
+                    if (option instanceof exports.Option)
+                        this.options.splice(index, 0, option);
+                }
+            }
+
+            return this;
         };
 
-        menu.addClass('rightClickMenu');
+        this.prepend = function (options) {
+            return this.add(options, 0);
+        }
 
-        if (left < (-leftToRemove)) {
-          left = (-leftToRemove);
+        this.append = function (options) {
+            return this.add(options, this.getNbrOfOptions());
+        }
 
-          if ((event.pageX - currentFile.offset().left) <= 11)
-            menuStyle.text('.fileActionsMenu.rightClickMenu{border-top-left-radius:0} .fileActionsMenu.rightClickMenu:after{left:0}');
-          else
-            menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (event.pageX - currentFile.offset().left) + 'px}');
-        } else if (left + menu.width() + leftToRemove + 10 > currentFile.width()) {
-          left = currentFile.width() - leftToRemove - menu.width() - 10;
+        // Generate all options html
+        this.generate = function () {
+            var ul = $('<ul>');
 
-          if ((event.pageX - currentFile.offset().left - leftToRemove - left) >= (menu.width() - 11))
-            menuStyle.text('.fileActionsMenu.rightClickMenu{border-top-right-radius:0} .fileActionsMenu.rightClickMenu:after{right:0}');
-          else
-            menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (event.pageX - currentFile.offset().left - leftToRemove - left) + 'px}');
-        } else
-          menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (menu.width() / 2) + 'px}');
+            for (var name in this.options) {
+                var li = this.options[name].generate();
 
-        menu.css({
-          right: 'auto',
-          top: top,
-          left: left
-        });
+                li.addClass('action-' + name);
+                ul.append(li);
+            }
 
-    	if (currentFile.hasClass('selected')) {
-    		menu.find('ul').html('');
+            return ul;
+        }
 
-    		generateNewOption('Check', 'category-disabled', t(appName, 'Unselect'), function () {
-    			$(currentFile.find('input.selectCheckBox')).click();
-    		});
+        this.getNbrOfOptions = function () {
+            return this.options.length;
+        }
 
-    		$.each(selectedActionsList, function (i, selectedActions) {
-    			$.each($(selectedActions).find('a'), function (j, selectedAction) {
-    				var action = $(selectedAction);
+        this.isDisabled = function () {
+            for (var name in this.options) {
+                if (!this.options[name].isDisabled())
+                    return false;
+            }
 
-    				if (action.is(":visible")) {
-    					generateNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
-    						action.click()
-    					}, false);
-    				}
-    			});
-    		});
-    	}
-    	else {
-    		var mimeType = currentFile.attr('data-mime');
-    		var text = '';
-    		var icon = 'toggle';
-    		var onClick = function () {
-    			currentFile.find('.filename .nametext').click();
-    		};
+            return true;
+        }
 
-    		var share = currentFile.find('.filename .fileactions .action-share');
+        this.isFirstDisabled = function () {
+            if (this.getNbrOfOptions() === 0)
+                return true;
+            else
+                return this.options[Object.keys(this.options)[0]].isDisabled();
+        }
 
-    		if (share.length !== 0) {
-    			generateNewOption('Share', 'share', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
-    				share.click();
-    			});
-    		}
+        this.add(options);
+    }
 
-    		if (currentFile.attr('data-type') === 'dir') {
-    			text = t(appName, 'Open folder');
-    			icon = 'filetype-folder-drag-accept';
+    exports.Option = function (name, text, icon, onClick, subOptions) {
+        this.name = name;
+        this.text = text;
+        this.icon = icon;
+        this.onClick = onClick;
+        this.subOptions = subOptions;
+        var option = this;
 
-    			generateNewOption('Open', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
-    				window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-    			});
-    		}
-    		else if (mimeType === 'text/plain') {
-    			text = t(appName, 'Edit file');
-    			icon = 'edit';
-    		}
-    		else if (mimeType === 'application/pdf') {
-    			text = t(appName, 'Read PDF');
-    		}
-    		else if (mimeType.indexOf('image') >= 0 && availableApplications.includes('gallery')) {
-    			text = t(appName, 'See picture');
+        this.generate = function () {
+            var a = $('<a>', {
+                'class': 'action action-' + this.name.toLowerCase()
+            });
+            var iconSpan = $('<span>', {
+                'class': this.icon
+            });
+            var textSpan = $('<span>', {
+                'text': this.text
+            });
 
-    			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
-    				window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-    			});
-    		}
-    		else if (mimeType.indexOf('audio') >= 0 && (availableApplications.includes('audioplayer') || availableApplications.includes('music'))) {
-    			var isReading = function () {
-    				return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
-    			};
+            if (this.onClick === undefined) {
+                a.attr('disabled', true).css({
+                    'cursor': 'default',
+                    'background-color': '#AAA'
+                });
 
-    			text = t(appName, 'Play/Pause');
-    			icon = 'play';
+                iconSpan.css('cursor', 'default');
+                textSpan.css('cursor', 'default');
+            }
 
-    			onClick = function () {
-    				if (!isReading()) {
-    					currentFile.find('.filename .nametext').click();
-    				}
-    			};
-    		}
-    		else if (mimeType.indexOf('video') >= 0 && availableApplications.includes('audioplayer')) {
-    			text = t(appName, 'Watch');
-    			icon = 'play';
-    		}
-    		else if (currentFile.attr('data-type') === 'file') {
-    			text = t(appName, 'Open file');
-    		}
+            return $('<li>').on('click', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
 
-    		if (text !== '') {
-    			generateNewOption('Open', icon, text, onClick);
-    		}
+                exports.closeAllMenus();
 
-    		if (!$('#selectedActionsList').hasClass('hidden')) {
-    			generateNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
-    				$(currentFile.find('input.selectCheckBox')).click();
-    			});
-    		}
-    	}
-      }, 200)
+                onClick(event, option);
+            }).append(a.append(iconSpan).append(textSpan));
+        };
 
-      return false;
+        this.isDisabled = function () {
+            return this.onClick === undefined;
+        }
+    }
+
+    exports.menus = [];
+    exports.Menu = function (delimiter, options, zIndex, onClose) {
+        this.delimiter = $(delimiter);
+        this.context = undefined;
+        this.options = options || new exports.Options();
+        this.params = {
+            'z-index': zIndex || 100
+        };
+        this.onClose = onClose;
+        this.isOpened = false;
+
+        if (delimiter === undefined)
+            return undefined;
+
+        // Allow onClick function to access to menu data
+        var menu = this;
+
+        this.setContext = function (context) {
+            this.context = context;
+        }
+
+        var onClick = function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            var delimiter = $(this);
+            var context = menu.context;
+            var options = menu.options;
+            var params = menu.params;
+
+            if (exports.closeAllMenus() === false)
+                return false;
+
+            menu.attachedEvent = event;
+            menu.isOpened = true;
+
+            if (typeof context === "function")
+                context = context(event);
+            context = (context === undefined) ? delimiter : $(context[0]);
+
+            if (typeof options === "function")
+                options = options(event, context, delimiter);
+
+            if (options.getNbrOfOptions() === 0)
+                return;
+
+            var div = $('<div>', {
+                'id': 'rightClickMenu',
+                'class': 'bubble open'
+            }).append(options.generate());
+
+            div.appendTo(context);
+
+            var top = event.pageY + context.position().top - context.offset().top + 15;
+            var left = event.pageX + context.position().left - context.offset().left - (div.width() / 2) - 5;
+            var arrow = (div.width() / 2);
+            var space = div.outerWidth(true) - div.innerWidth();
+
+            if (left < 0) {
+                arrow += left;
+
+                if (arrow < space) {
+                    arrow = space;
+                    div.css('border-top-left-radius', 0);
+                }
+
+                left = 0;
+            }
+            else if (left + div.outerWidth(true) >= context.width()) {
+                var newLeft = context.width() - div.outerWidth(true) - 1;
+                arrow += left - newLeft;
+
+                if (arrow > div.width() - space) {
+                    arrow = div.width() - space;
+                    div.css('border-top-right-radius', 0);
+                }
+
+                left = newLeft;
+            }
+
+            div.css({
+                'top': top,
+                'left': left,
+                'right': 'auto',
+                'z-index': params['z-index']
+            });
+
+            var optionsDisabled = options.isDisabled();
+
+            if (optionsDisabled)
+                div.css('background-color', '#AAA');
+
+            $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
+
+            return false;
+        }
+
+        this.close = function () {
+            var openedMenu = this.delimiter.find('#rightClickMenu');
+
+            if (openedMenu.length > 0) {
+                if (this.onClose) {
+                    if (this.onClose(this.attachedEvent, this.context, this.delimiter) === false)
+                        return false;
+                }
+
+                openedMenu.remove();
+            }
+
+            return true;
+        }
+
+        this.setAlsoOnLeftClick = function () {
+            this.delimiter.on('click', onClick);
+
+            return this;
+        }
+
+        this.delimiter.contextmenu(onClick);
+        exports.menus.push(this);
     };
+
+    exports.closeAllMenus = function () {
+        for (var i in exports.menus) {
+            if (exports.menus.hasOwnProperty(i)) {
+                if (exports.menus[i].close() === false)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    $('<style class="rightClickStyle"></style>').appendTo('head');
+    $('body').on('click', exports.closeAllMenus).contextmenu(exports.closeAllMenus);
 })(window, jQuery, RightClick);
