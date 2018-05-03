@@ -143,7 +143,7 @@ var RightClick = RightClick || {};
     			text = t(appName, 'See picture');
 
     			generateNewOption('Open', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
-    				window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
+            window.open(OC.generateUrl('/apps/gallery') + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
     			});
     		}
     		else if (mimeType.indexOf('audio') >= 0 && (availableApplications.includes('audioplayer') || availableApplications.includes('music'))) {
