@@ -3,6 +3,11 @@ var RightClick = RightClick || {};
 (function(window, $, RightClick, undefined) {
     'use strict';
 
+    if (!RightClick) {
+        console.log('The RightClick app is recommanded to have context menus');
+        return false;
+    }
+
     var availableApplications = [];
 
     $.get('/apps/files_rightclick/ajax/applications.php', function (data) {
@@ -14,10 +19,8 @@ var RightClick = RightClick || {};
       }
     });
 
-    new RightClick.Menu($('tbody[id*=fileList]'), function (event) {
+    new RightClick.Menu($('tbody[id*=fileList]'), function (event, currentFile, delimiter) {
         var appName = 'files_rightclick';
-        var currentFile = $(event.target).closest('tr');
-        var leftToRemove = currentFile.find('.selection').width();
         var options = new RightClick.Options();
 
         if ($(event.target).parent().hasClass('fileactions') || $(event.target).parent().parent().hasClass('fileactions')) {
@@ -31,8 +34,6 @@ var RightClick = RightClick || {};
         var menu = currentFile.find('.fileActionsMenu');
         var menuStyle = $('style.rightClickStyle');
         var selectedActionsList = $('.selectedActions');
-        var top = (event.pageY - currentFile.offset().top + (currentFile.height() / 4));
-        var left = event.pageX - currentFile.offset().left - leftToRemove - (menu.width() / 2) - 4;
         var generateNewOption = function (action, icon, text, onClick, prepend) {
             if (prepend === undefined)
                 prepend = true;
@@ -53,63 +54,11 @@ var RightClick = RightClick || {};
                 options.prepend(option);
             else
                 options.append(option);
-
-            /*
-            if (prepend === undefined)
-              prepend = true;
-
-            var newOption = $('<li><a href="#" class="menuitem action permanent" data-action="' + action + '"><span class="icon icon-' + icon + '"></span><span>' + text + '</span></a></li>').on('click', function (event) {
-                event.stopPropagation();
-                event.preventDefault();
-
-                menu.remove();
-                currentFile.removeClass('mouseOver');
-                currentFile.removeClass('highlighted');
-                currentFile.find('.action-menu').removeClass('open');
-
-                onClick();
-            });
-
-            if (prepend) {
-                menu.find('ul').prepend(
-                    newOption
-                );
-            }
-            else {
-                menu.find('ul').append(
-                    newOption
-                );
-            }*/
         };
 
         //menu.addClass('rightClickMenu');
         menu.css('visibility', 'hidden');
-
-        if (left < (-leftToRemove)) {
-            left = (-leftToRemove);
-
-            if ((event.pageX - currentFile.offset().left) <= 11)
-              menuStyle.text('.fileActionsMenu.rightClickMenu{border-top-left-radius:0} .fileActionsMenu.rightClickMenu:after{left:0}');
-            else
-              menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (event.pageX - currentFile.offset().left) + 'px}');
-        }
-        else if (left + menu.width() + leftToRemove + 10 > currentFile.width()) {
-            left = currentFile.width() - leftToRemove - menu.width() - 10;
-
-            if ((event.pageX - currentFile.offset().left - leftToRemove - left) >= (menu.width() - 11))
-                menuStyle.text('.fileActionsMenu.rightClickMenu{border-top-right-radius:0} .fileActionsMenu.rightClickMenu:after{right:0}');
-            else
-                menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (event.pageX - currentFile.offset().left - leftToRemove - left) + 'px}');
-        }
-        else
-            menuStyle.text('.fileActionsMenu.rightClickMenu:after{transform:translateX(-50%);left:' + (menu.width() / 2) + 'px}');
-
-        menu.css({
-            right: 'auto',
-            top: top,
-            left: left
-        });
-
+        
         if (currentFile.hasClass('selected')) {
             menu.find('ul').html('');
 
@@ -210,5 +159,7 @@ var RightClick = RightClick || {};
         }
 */
         return options;
-    }, $('#controls').css('z-index') - 1);
+    }, $('#controls').css('z-index') - 1).setContext(function (event) {
+        return $(event.target).closest('tr');
+    });
 })(window, jQuery, RightClick);

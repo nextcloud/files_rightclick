@@ -94,7 +94,9 @@ var RightClick = RightClick || {};
         this.subOptions = subOptions;
 
         this.generate = function () {
-            var a = $('<a>');
+            var a = $('<a>', {
+                'class': 'action action-' + name
+            });
             var iconSpan = $('<span>', {
                 'class': this.icon
             });
@@ -112,9 +114,7 @@ var RightClick = RightClick || {};
                 textSpan.css('cursor', 'default');
             }
 
-            return $('<li>', {
-                'class': 'action action-' + name
-            }).on('click', onClick).append(a.append(iconSpan).append(textSpan));
+            return $('<li>').on('click', onClick).append(a.append(iconSpan).append(textSpan));
         };
 
         this.isDisabled = function () {
@@ -123,24 +123,32 @@ var RightClick = RightClick || {};
     }
 
     exports.menus = [];
-    exports.Menu = function (context, options, zIndex, onClose) {
-        this.context = $(context);
+    exports.Menu = function (delimiter, options, zIndex, onClose) {
+        this.delimiter = $(delimiter);
+        this.context = undefined;
         this.options = options || new exports.Options();
         this.params = {
             'z-index': zIndex || 100
         };
         this.onClose = onClose;
         this.isOpened = false;
+
+        if (delimiter === undefined)
+            return undefined;
+
+        // Allow onClick function to access to menu data
         var menu = this;
 
-        if (context === undefined)
-            return undefined;
+        this.setContext = function (context) {
+            this.context = context;
+        }
 
         var onClick = function (event) {
             event.stopPropagation();
             event.preventDefault();
 
-            var $this = $(this);
+            var delimiter = $(this);
+            var context = menu.context;
             var options = menu.options;
             var params = menu.params;
 
@@ -150,8 +158,12 @@ var RightClick = RightClick || {};
             menu.attachedEvent = event;
             menu.isOpened = true;
 
+            if (typeof context === "function")
+                context = context(event);
+            context = (context === undefined) ? delimiter : $(context[0]);
+
             if (typeof options === "function")
-                options = options(event);
+                options = options(event, context, delimiter);
 
             if (options.getNbrOfOptions() === 0)
                 return;
@@ -161,10 +173,34 @@ var RightClick = RightClick || {};
                 'class': 'bubble open'
             }).append(options.generate());
 
-            div.appendTo($this);
+            div.appendTo(context);
 
-            var top = event.pageY + $this.position().top - $this.offset().top + 15;
-            var left = event.pageX + $this.position().left - $this.offset().left - (div.width() / 2) - 5;
+            var top = event.pageY + context.position().top - context.offset().top + 15;
+            var left = event.pageX + context.position().left - context.offset().left - (div.width() / 2) - 5;
+            var arrow = (div.width() / 2);
+            var space = div.outerWidth(true) - div.innerWidth();
+
+            if (left < 0) {
+                arrow += left;
+
+                if (arrow < space) {
+                    arrow = space;
+                    div.css('border-top-left-radius', 0);
+                }
+
+                left = 0;
+            }
+            else if (left + div.outerWidth(true) >= context.width()) {
+                var newLeft = context.width() - div.outerWidth(true) - 1;
+                arrow += left - newLeft;
+
+                if (arrow > div.width() - space) {
+                    arrow = div.width() - space;
+                    div.css('border-top-right-radius', 0);
+                }
+
+                left = newLeft;
+            }
 
             div.css({
                 'top': top,
@@ -178,27 +214,33 @@ var RightClick = RightClick || {};
             if (optionsDisabled)
                 div.css('background-color', '#AAA');
 
-            $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + (div.width() / 2) + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
+            $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
 
             return false;
         }
 
         this.close = function () {
-            var opened = this.context.find('#rightClickMenu');
+            var openedMenu = this.delimiter.find('#rightClickMenu');
 
-            if (opened.length > 0) {
+            if (openedMenu.length > 0) {
                 if (this.onClose) {
-                    if (this.onClose(this.attachedEvent, this.context) === false)
+                    if (this.onClose(this.attachedEvent, this.context, this.delimiter) === false)
                         return false;
                 }
 
-                opened.remove();
+                openedMenu.remove();
             }
 
             return true;
         }
 
-        this.context.contextmenu(onClick);
+        this.setAlsoOnLeftClick = function () {
+            this.delimiter.on('click', onClick);
+
+            return this;
+        }
+
+        this.delimiter.contextmenu(onClick);
         exports.menus.push(this);
     };
 
