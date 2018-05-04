@@ -10,7 +10,7 @@ var RightClick = RightClick || {};
 
     var availableApplications = [];
 
-    $.get('/apps/files_rightclick/ajax/applications.php', function (data) {
+    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications.php'), function (data) {
       try {
         availableApplications = JSON.parse(data);
       }
@@ -30,7 +30,7 @@ var RightClick = RightClick || {};
         var menuStyle = $('style.rightClickStyle');
         var selectedActionsList = $('.selectedActions');
         var generateNewOption = function (action, icon, text, onClick, prepend, subOptions) {
-            return new RightClick.Option(action, text, 'icon-' + icon, onClick ? function (event, context) {
+            return new RightClick.Option(action, text, 'icon-' + icon, typeof onClick === 'function' ? function (event, context) {
                 event.stopPropagation();
                 event.preventDefault();
 
@@ -40,7 +40,7 @@ var RightClick = RightClick || {};
                 currentFile.find('.action-menu').removeClass('open');
 
                 onClick(event, context);
-            } : undefined, subOptions);
+            } : onClick, subOptions);
         };
         var addNewOption = function (action, icon, text, onClick, prepend, subOptions) {
             if (prepend === undefined)
@@ -121,7 +121,7 @@ var RightClick = RightClick || {};
                 text = t(appName, 'See picture');
 
                 addNewOpenSubOption('Gallery', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
-                    window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
+                    window.open(OC.generateUrl('/apps/gallery') + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
                 });
             }
             else if (mimeType.indexOf('audio') >= 0 && (availableApplications.includes('audioplayer') || availableApplications.includes('music'))) {
@@ -147,6 +147,8 @@ var RightClick = RightClick || {};
             }
 
             if (text !== '') {
+                addNewOpenSubOption('WebDAV', 'public', t(appName, 'Get WebDAV link'), window.location.origin + OC.generateUrl('/remote.php/webdav' + currentFile.attr('data-path') + currentFile.attr('data-file')), false);
+
                 addNewOption('Open', icon, text, onClick, true, openSubOptions);
             }
 

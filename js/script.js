@@ -97,7 +97,7 @@ var RightClick = RightClick || {};
         this.generate = function () {
             var a = $('<a>', {
                 'class': 'menu-option option-' + this.name.toLowerCase()
-            });
+            }).css('width', '100%');
             var iconSpan = $('<span>', {
                 'class': 'icon ' + this.icon
             });
@@ -115,19 +115,41 @@ var RightClick = RightClick || {};
                 textSpan.css('cursor', 'default');
             }
 
-            a.on('click', function (event) {
-                event.stopPropagation();
-                event.preventDefault();
+            if (typeof this.onClick === 'string') {
+                a.on('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
 
-                exports.closeAllMenus();
+                    var $temp = $("<input>");
+                    $("body").append($temp);
+                    $temp.val(option.onClick).select();
+                    document.execCommand("copy");
+                    $temp.remove();
 
-                onClick(event, option);
-            });
+                    var html = textSpan.html();
+                    textSpan.html(t('files_rightclick', 'Copied !'));
+
+                    setTimeout(function () {
+                        textSpan.html(html);
+                    }, 1000);
+                });
+            }
+            else {
+                a.on('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    exports.closeAllMenus();
+
+                    onClick(event, option);
+                });
+            }
+
 
             var li = $('<li>').append(a.append(iconSpan).append(textSpan));
 
             if (this.subOptions instanceof exports.Options && this.subOptions.getNbrOfOptions() > 0) {
-                var sub = $('<a>').append($('<span>').text('▶').css('padding-right', '10px')).attr('style', 'padding-right: 0px !important');
+                var sub = $('<a>').append($('<span>').text('▶').css('padding-right', '10px')).attr('style', 'width: auto; padding-right: 0px !important');
 
                 new exports.Menu(sub, this.subOptions).setContext(li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
                 li.append(sub);
@@ -176,7 +198,7 @@ var RightClick = RightClick || {};
             var params = menu.params;
 
             if (menu.isSubMenu) {
-                if (!menu.close())
+                if (!exports.closeAllSubMenus())
                     return false;
             }
             else if (!exports.closeAllMenus())
@@ -211,7 +233,7 @@ var RightClick = RightClick || {};
 
             if (menu.isSubMenu) {
                 div.css({
-                    'left': context.parents('.rightClick').first().width(),
+                    'left': context.parents('.rightClick').first().innerWidth() - (Math.abs(div.css("marginLeft").replace('px', '')) / 2),
                     'right': 'auto',
                     'top': context.position().top + Math.abs(div.css("marginTop").replace('px', ''))
                 });
@@ -260,13 +282,12 @@ var RightClick = RightClick || {};
             if (!menu.isSubMenu)
                 $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '} .rightSubMenu:after{display:none}');
 
-            if (menu.isOpenedOnHover) {
-                div.on('mouseleave', function (event) {
-                    if (menu.isOpenedOnHover)
-                        menu.close();
-                });
-            }
+            div.on('mouseleave', function (event) {
+                if (menu.isOpenedOnHover)
+                    menu.close();
+            });
 
+            $('body').on('click contextmenu', exports.closeAllMenus);
             return false;
         };
 
@@ -306,13 +327,6 @@ var RightClick = RightClick || {};
 
         this.setAlsoOnHover = function () {
             this.delimiter.on('mouseenter', function (event) {
-                if (menu.isOpenedOnHover) {
-                    menu.delimiter.on('mouseleave', function (event) {
-                        if (menu.isOpenedOnHover)
-                            menu.close();
-                    });
-                }
-
                 menu.isOpened = true;
                 menu.isOpenedOnHover = true;
             }).on('mouseenter', onClick);
@@ -341,6 +355,16 @@ var RightClick = RightClick || {};
         return true;
     }
 
+    exports.closeAllSubMenus = function () {
+        for (var i in exports.menus) {
+            if (exports.menus.hasOwnProperty(i)) {
+                if (exports.menus[i].isSubMenu && exports.menus[i].close() === false)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
     $('<style class="rightClickStyle"></style>').appendTo('head');
-    $('body').on('click', exports.closeAllMenus).contextmenu(exports.closeAllMenus);
 })(window, jQuery, RightClick);

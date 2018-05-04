@@ -15,6 +15,8 @@ OC.L10N.register(
     "Share file" : "Partager le fichier",
 	"Select" : "Sélectionner",
 	"Unselect" : "Désélectionner",
+    "Get WebDAV link" : "Avoir le lien WebDAV",
+    "Copied !": "Copié !"
   },
   "nplurals=2; plural=(n > 1);"
 );

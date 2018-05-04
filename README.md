@@ -39,6 +39,13 @@
 - [ ] Backport to NC 12
 
 # Changelogs
+### v0.8.3
+- Add a copy function (text instead of an onClick function)
+- Add WebDAV link copy option https://github.com/NastuzziSamy/files_rightclick/issues/15
+- Bugs fix:
+    - Bad sub menu positions
+    - Bad urls corrected https://github.com/NastuzziSamy/files_rightclick/issues/17
+
 ### v0.8.2
 - Improve submenu display
 - Better onHover management
