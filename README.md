@@ -39,6 +39,13 @@
 - [ ] Backport to NC 12
 
 # Changelogs
+### v0.8.2
+- Improve submenu display
+- Better onHover management
+- Better class names
+- Bug fix:
+    - Share option didn't show correctly https://github.com/NastuzziSamy/files_rightclick/issues/19
+
 ### v0.8.1
 - Add submenu compatibility
 - Optimizations and bugs fixed

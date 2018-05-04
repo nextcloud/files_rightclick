@@ -96,13 +96,13 @@ var RightClick = RightClick || {};
 
         this.generate = function () {
             var a = $('<a>', {
-                'class': 'action action-' + this.name.toLowerCase()
+                'class': 'menu-option option-' + this.name.toLowerCase()
             });
             var iconSpan = $('<span>', {
                 'class': 'icon ' + this.icon
             });
             var textSpan = $('<span>', {
-                'text': this.text
+                'text': this.text,
             });
 
             if (this.onClick === undefined) {
@@ -129,7 +129,7 @@ var RightClick = RightClick || {};
             if (this.subOptions instanceof exports.Options && this.subOptions.getNbrOfOptions() > 0) {
                 var sub = $('<a>').append($('<span>').text('▶').css('padding-right', '10px')).attr('style', 'padding-right: 0px !important');
 
-                new exports.Menu(sub, this.subOptions).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
+                new exports.Menu(sub, this.subOptions).setContext(li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
                 li.append(sub);
             }
 
@@ -145,6 +145,7 @@ var RightClick = RightClick || {};
     exports.Menu = function (delimiter, options, zIndex, onClose) {
         this.delimiter = $(delimiter);
         this.context = undefined;
+        this.currentContext = undefined;
         this.options = options || new exports.Options();
         this.params = {
             'z-index': zIndex || 100
@@ -189,7 +190,9 @@ var RightClick = RightClick || {};
 
             if (typeof context === "function")
                 context = context(event);
+
             context = (context === undefined) ? delimiter : $(context[0]);
+            menu.currentContext = context;
 
             if (typeof options === "function")
                 options = options(event, context, delimiter);
@@ -198,7 +201,7 @@ var RightClick = RightClick || {};
                 return;
 
             var div = $('<div>', menu.isSubMenu ? {
-                'class': 'rightClick rightSubMenu'
+                'class': 'rightClick rightSubMenu bubble open'
             } : {
                 'id': 'rightClickMenu',
                 'class': 'rightClick bubble open'
@@ -207,7 +210,11 @@ var RightClick = RightClick || {};
             div.appendTo(context);
 
             if (menu.isSubMenu) {
-                div.css('border-left', 'SOLID 1px grey');
+                div.css({
+                    'left': context.parents('.rightClick').first().width(),
+                    'right': 'auto',
+                    'top': context.position().top + Math.abs(div.css("marginTop").replace('px', ''))
+                });
             }
             else {
                 var top = event.pageY + delimiter.position().top - delimiter.offset().top + 15;
@@ -251,7 +258,14 @@ var RightClick = RightClick || {};
                 div.css('background-color', '#AAA');
 
             if (!menu.isSubMenu)
-                $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
+                $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '} .rightSubMenu:after{display:none}');
+
+            if (menu.isOpenedOnHover) {
+                div.on('mouseleave', function (event) {
+                    if (menu.isOpenedOnHover)
+                        menu.close();
+                });
+            }
 
             return false;
         };
@@ -260,11 +274,11 @@ var RightClick = RightClick || {};
             if (!this.isOpened)
                 return true;
 
-            var openedMenu = this.context && (typeof this.context !== "function") ? this.context.find('.rightClick') : this.delimiter.find('.rightClick');
+            var openedMenu = this.currentContext ? this.currentContext.find('.rightClick') : this.delimiter.find('.rightClick');
 
             if (openedMenu.length > 0) {
                 if (this.onClose) {
-                    if (this.onClose(this.attachedEvent, this.context, this.delimiter) === false)
+                    if (this.onClose(this.attachedEvent, this.currentContext, this.delimiter) === false)
                         return false;
                 }
 
@@ -292,14 +306,16 @@ var RightClick = RightClick || {};
 
         this.setAlsoOnHover = function () {
             this.delimiter.on('mouseenter', function (event) {
+                if (menu.isOpenedOnHover) {
+                    menu.delimiter.on('mouseleave', function (event) {
+                        if (menu.isOpenedOnHover)
+                            menu.close();
+                    });
+                }
+
                 menu.isOpened = true;
                 menu.isOpenedOnHover = true;
             }).on('mouseenter', onClick);
-
-            this.delimiter.on('mouseleave', function (event) {
-                if (menu.isOpenedOnHover)
-                    menu.close();
-            });
 
             return this;
         };
