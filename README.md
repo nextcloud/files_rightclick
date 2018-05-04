@@ -34,53 +34,57 @@
 - [x] Create a context menu generator
 - [ ] Add a context menu to create files or directories
 - [ ] Add a context menu in each icon apps
-- [ ] Add sub menu compatibility in context menu
+- [x] Add sub menu compatibility in context menu
 - [ ] Publish a new app (with a different name) and allow any app to create its own context menu(s)
 - [ ] Backport to NC 12
 
 # Changelogs
-## v0.8.0
-    - Creation of an object to create simple menus (avalaible for any apps):
-        - RightClick.Option create an option for a menu with an icon, a text and an onClick function
-        - RightClick.Options regroup given options for a menu
-        - RightClick.Menu allow to create a menu object applied to a delimited area
-    - The next version will allow to have submenus
-    - Add changelogs https://github.com/NastuzziSamy/files_rightclick/issues/16
+### v0.8.1
+- Add submenu compatibility
+- Optimizations and bugs fixed
 
-## v0.7.0
-    - Add TODO list
-    - Optimizations
-    - Set the NC compatibility to v13 and above https://github.com/NastuzziSamy/files_rightclick/issues/14
+### v0.8.0
+- Creation of an object to create simple menus (avalaible for any apps):
+    - RightClick.Option create an option for a menu with an icon, a text and an onClick function
+    - RightClick.Options regroup given options for a menu
+    - RightClick.Menu allow to create a menu object applied to a delimited area
+- The next version will allow to have submenus
+- Add changelogs https://github.com/NastuzziSamy/files_rightclick/issues/16
 
-## v0.6.1
-    - Add russian translation (thanks to @zorn)
+### v0.7.0
+- Add TODO list
+- Optimizations
+- Set the NC compatibility to v13 and above https://github.com/NastuzziSamy/files_rightclick/issues/14
 
-## v0.6.0
-    - Can now recognized available apps
-    - Bug fixed:
-        - Correct loop of death caused by audioplayer incompatibily (now fixed) https://github.com/NastuzziSamy/files_rightclick/issues/10
+### v0.6.1
+- Add russian translation (thanks to @zorn)
 
-## v0.5.3
-    - Bugs fixed:
-        - Share icon didn't show https://github.com/NastuzziSamy/files_rightclick/issues/12
-        - Right click context fixed
+### v0.6.0
+- Can now recognized available apps
+- Bug fixed:
+    - Correct loop of death caused by audioplayer incompatibily (now fixed) https://github.com/NastuzziSamy/files_rightclick/issues/10
 
-## v0.5.2
-    - German text updated (thanks to @worldworm)
-    - Right click context changed
+### v0.5.3
+- Bugs fixed:
+    - Share icon didn't show https://github.com/NastuzziSamy/files_rightclick/issues/12
+    - Right click context fixed
 
-## v0.5.1
-    - Text shortened https://github.com/NastuzziSamy/files_rightclick/issues/9
+### v0.5.2
+- German text updated (thanks to @worldworm)
+- Right click context changed
 
-## v0.5.0
-    - Add portuguese brazil translation (thanks to @darioems)
-    - Add german translation (thanks to @worldworm)
-    - Add (un)select options
-    - Bugs fixed:
-        - Copy/Move options https://github.com/NastuzziSamy/files_rightclick/issues/5
-        - Right click menu didn't show when the file was shared by link
+### v0.5.1
+- Text shortened https://github.com/NastuzziSamy/files_rightclick/issues/9
 
-## v0.4.0
-    - First release in the NC appstore
-    - Add right click on files
-    - Add custom options for each type of file
+### v0.5.0
+- Add portuguese brazil translation (thanks to @darioems)
+- Add german translation (thanks to @worldworm)
+- Add (un)select options
+- Bugs fixed:
+    - Copy/Move options https://github.com/NastuzziSamy/files_rightclick/issues/5
+    - Right click menu didn't show when the file was shared by link
+
+### v0.4.0
+- First release in the NC appstore
+- Add right click on files
+- Add custom options for each type of file

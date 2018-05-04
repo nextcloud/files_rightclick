@@ -99,7 +99,7 @@ var RightClick = RightClick || {};
                 'class': 'action action-' + this.name.toLowerCase()
             });
             var iconSpan = $('<span>', {
-                'class': this.icon
+                'class': 'icon ' + this.icon
             });
             var textSpan = $('<span>', {
                 'text': this.text
@@ -115,14 +115,25 @@ var RightClick = RightClick || {};
                 textSpan.css('cursor', 'default');
             }
 
-            return $('<li>').on('click', function (event) {
+            a.on('click', function (event) {
                 event.stopPropagation();
                 event.preventDefault();
 
                 exports.closeAllMenus();
 
                 onClick(event, option);
-            }).append(a.append(iconSpan).append(textSpan));
+            });
+
+            var li = $('<li>').append(a.append(iconSpan).append(textSpan));
+
+            if (this.subOptions instanceof exports.Options && this.subOptions.getNbrOfOptions() > 0) {
+                var sub = $('<a>').append($('<span>').text('▶').css('padding-right', '10px')).attr('style', 'padding-right: 0px !important');
+
+                new exports.Menu(sub, this.subOptions).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
+                li.append(sub);
+            }
+
+            return li;
         };
 
         this.isDisabled = function () {
@@ -139,6 +150,7 @@ var RightClick = RightClick || {};
             'z-index': zIndex || 100
         };
         this.onClose = onClose;
+        this.isSubMenu = false;
         this.isOpened = false;
 
         if (delimiter === undefined)
@@ -149,7 +161,9 @@ var RightClick = RightClick || {};
 
         this.setContext = function (context) {
             this.context = context;
-        }
+
+            return this;
+        };
 
         var onClick = function (event) {
             event.stopPropagation();
@@ -160,7 +174,14 @@ var RightClick = RightClick || {};
             var options = menu.options;
             var params = menu.params;
 
-            if (exports.closeAllMenus() === false)
+            if (menu.isSubMenu) {
+                if (!menu.close())
+                    return false;
+            }
+            else if (!exports.closeAllMenus())
+                return false;
+
+            if (menu.isOpened)
                 return false;
 
             menu.attachedEvent = event;
@@ -176,59 +197,70 @@ var RightClick = RightClick || {};
             if (options.getNbrOfOptions() === 0)
                 return;
 
-            var div = $('<div>', {
+            var div = $('<div>', menu.isSubMenu ? {
+                'class': 'rightClick rightSubMenu'
+            } : {
                 'id': 'rightClickMenu',
-                'class': 'bubble open'
+                'class': 'rightClick bubble open'
             }).append(options.generate());
 
             div.appendTo(context);
 
-            var top = event.pageY + delimiter.position().top - delimiter.offset().top + 15;
-            var left = event.pageX + delimiter.position().left - delimiter.offset().left - (div.width() / 2) - 5;
-            var arrow = (div.width() / 2);
-            var space = div.outerWidth(true) - div.innerWidth();
+            if (menu.isSubMenu) {
+                div.css('border-left', 'SOLID 1px grey');
+            }
+            else {
+                var top = event.pageY + delimiter.position().top - delimiter.offset().top + 15;
+                var left = event.pageX + delimiter.position().left - delimiter.offset().left - (div.width() / 2) - 5;
+                var arrow = (div.width() / 2);
+                var space = div.outerWidth(true) - div.innerWidth();
 
-            if (left < 0) {
-                arrow += left;
+                if (left < 0) {
+                    arrow += left;
 
-                if (arrow < space) {
-                    arrow = space;
-                    div.css('border-top-left-radius', 0);
+                    if (arrow < space) {
+                        arrow = space;
+                        div.css('border-top-left-radius', 0);
+                    }
+
+                    left = 0;
+                }
+                else if (left + div.outerWidth(true) >= delimiter.width()) {
+                    var newLeft = delimiter.width() - div.outerWidth(true) - 1;
+                    arrow += left - newLeft;
+
+                    if (arrow > div.width() - space) {
+                        arrow = div.width() - space;
+                        div.css('border-top-right-radius', 0);
+                    }
+
+                    left = newLeft;
                 }
 
-                left = 0;
+                div.css({
+                    'top': top,
+                    'left': left,
+                    'right': 'auto',
+                    'z-index': params['z-index']
+                });
             }
-            else if (left + div.outerWidth(true) >= delimiter.width()) {
-                var newLeft = delimiter.width() - div.outerWidth(true) - 1;
-                arrow += left - newLeft;
-
-                if (arrow > div.width() - space) {
-                    arrow = div.width() - space;
-                    div.css('border-top-right-radius', 0);
-                }
-
-                left = newLeft;
-            }
-
-            div.css({
-                'top': top,
-                'left': left,
-                'right': 'auto',
-                'z-index': params['z-index']
-            });
 
             var optionsDisabled = options.isDisabled();
 
             if (optionsDisabled)
                 div.css('background-color', '#AAA');
 
-            $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
+            if (!menu.isSubMenu)
+                $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '}');
 
             return false;
-        }
+        };
 
         this.close = function () {
-            var openedMenu = this.delimiter.find('#rightClickMenu');
+            if (!this.isOpened)
+                return true;
+
+            var openedMenu = this.context && (typeof this.context !== "function") ? this.context.find('.rightClick') : this.delimiter.find('.rightClick');
 
             if (openedMenu.length > 0) {
                 if (this.onClose) {
@@ -239,14 +271,44 @@ var RightClick = RightClick || {};
                 openedMenu.remove();
             }
 
+            this.isOpened = false;
             return true;
-        }
+        };
 
         this.setAlsoOnLeftClick = function () {
-            this.delimiter.on('click', onClick);
+            this.delimiter.on('click', function (event) {
+                if (menu.isOpened && !menu.isOpenedOnHover) {
+                    menu.close();
+
+                    return false;
+                }
+
+                menu.isOpenedOnHover = false;
+                menu.isOpened = true;
+            }).on('click', onClick);
 
             return this;
-        }
+        };
+
+        this.setAlsoOnHover = function () {
+            this.delimiter.on('mouseenter', function (event) {
+                menu.isOpened = true;
+                menu.isOpenedOnHover = true;
+            }).on('mouseenter', onClick);
+
+            this.delimiter.on('mouseleave', function (event) {
+                if (menu.isOpenedOnHover)
+                    menu.close();
+            });
+
+            return this;
+        };
+
+        this.setAsSubMenu = function (isSubMenu) {
+            this.isSubMenu = isSubMenu || true;
+
+            return this;
+        };
 
         this.delimiter.contextmenu(onClick);
         exports.menus.push(this);

@@ -22,17 +22,15 @@ var RightClick = RightClick || {};
     new RightClick.Menu($('tbody[id*=fileList]'), function (event, currentFile, delimiter) {
         var appName = 'files_rightclick';
         var options = new RightClick.Options();
+        var openSubOptions = new RightClick.Options();
 
         currentFile.find('.action-menu').click();
 
         var menu = currentFile.find('.fileActionsMenu');
         var menuStyle = $('style.rightClickStyle');
         var selectedActionsList = $('.selectedActions');
-        var generateNewOption = function (action, icon, text, onClick, prepend) {
-            if (prepend === undefined)
-                prepend = true;
-
-            var option = new RightClick.Option(action, text, 'icon icon-' + icon, function (event) {
+        var generateNewOption = function (action, icon, text, onClick, prepend, subOptions) {
+            return new RightClick.Option(action, text, 'icon-' + icon, onClick ? function (event, context) {
                 event.stopPropagation();
                 event.preventDefault();
 
@@ -41,13 +39,30 @@ var RightClick = RightClick || {};
                 currentFile.removeClass('highlighted');
                 currentFile.find('.action-menu').removeClass('open');
 
-                onClick();
-            });
+                onClick(event, context);
+            } : undefined, subOptions);
+        };
+        var addNewOption = function (action, icon, text, onClick, prepend, subOptions) {
+            if (prepend === undefined)
+                prepend = true;
+
+            var option = generateNewOption(action, icon, text, onClick, prepend, subOptions);
 
             if (prepend)
                 options.prepend(option);
             else
                 options.append(option);
+        };
+        var addNewOpenSubOption = function (action, icon, text, onClick, prepend, subOptions) {
+            if (prepend === undefined)
+                prepend = true;
+
+            var option = generateNewOption(action, icon, text, onClick, prepend, subOptions);
+
+            if (prepend)
+                openSubOptions.prepend(option);
+            else
+                openSubOptions.append(option);
         };
 
         menu.css('visibility', 'hidden');
@@ -55,7 +70,7 @@ var RightClick = RightClick || {};
         if (currentFile.hasClass('selected')) {
             menu.find('ul').html('');
 
-            generateNewOption('Check', 'category-disabled', t(appName, 'Unselect'), function () {
+            addNewOption('Check', 'category-disabled', t(appName, 'Unselect'), function () {
                 $(currentFile.find('input.selectCheckBox')).click();
             });
 
@@ -64,7 +79,7 @@ var RightClick = RightClick || {};
                     var action = $(selectedAction);
 
                     if (action.is(":visible")) {
-                        generateNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
+                        addNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
                             action.click()
                         }, false);
                     }
@@ -82,7 +97,7 @@ var RightClick = RightClick || {};
             var share = currentFile.find('.filename .fileactions .action-share');
 
             if (share.length !== 0) {
-                generateNewOption('Share', 'share', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
+                addNewOption('Share', 'share', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
                     share.click();
                 });
             }
@@ -91,7 +106,7 @@ var RightClick = RightClick || {};
                 text = t(appName, 'Open folder');
                 icon = 'filetype-folder-drag-accept';
 
-                generateNewOption('NewTab', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
+                addNewOpenSubOption('NewTab', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
                     window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
                 });
             }
@@ -105,7 +120,7 @@ var RightClick = RightClick || {};
             else if (mimeType.indexOf('image') >= 0 && availableApplications.includes('gallery')) {
                 text = t(appName, 'See picture');
 
-                generateNewOption('Gallery', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
+                addNewOpenSubOption('Gallery', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
                     window.open('/apps/gallery' + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
                 });
             }
@@ -132,11 +147,11 @@ var RightClick = RightClick || {};
             }
 
             if (text !== '') {
-                generateNewOption('Open', icon, text, onClick);
+                addNewOption('Open', icon, text, onClick, true, openSubOptions);
             }
 
             if (!$('#selectedActionsList').hasClass('hidden')) {
-                generateNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
+                addNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
                     $(currentFile.find('input.selectCheckBox')).click();
                 });
             }
