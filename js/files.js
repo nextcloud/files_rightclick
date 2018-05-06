@@ -10,13 +10,8 @@ var RightClick = RightClick || {};
 
     var availableApplications = [];
 
-    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications.php'), function (data) {
-      try {
-        availableApplications = JSON.parse(data);
-      }
-      catch (error) {
-        availableApplications = [];
-      }
+    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications'), function (data) {
+      availableApplications = data;
     });
 
     new RightClick.Menu($('tbody[id*=fileList]'), function (event, currentFile, delimiter) {
