@@ -1,4 +1,7 @@
 <?php
 
-$this->create('files_ajax_applications', '/ajax/applications.php')
-	->actionInclude('files_rightclick/ajax/applications.php');
+return [
+    'routes' => [
+        ['name' => 'ajax#applications', 'url' => '/ajax/applications', 'verb' => 'GET'],
+    ]
+];
