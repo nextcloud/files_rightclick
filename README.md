@@ -27,7 +27,7 @@
     - [x] Open option (detect the file type)
     - [x] Check or uncheck option
     - [x] Adapt sharing and copy/move options with selected files
-    - [ ] WebDAV link option
+    - [x] WebDAV link option
 - [x] Detect if an app is installed
 - [x] Split js files
 - [x] Use strict mode
@@ -39,6 +39,13 @@
 - [ ] Backport to NC 12
 
 # Changelogs
+### v0.8.4
+- Rerouting as suggested by @zorn
+- Bugs fixed:
+    - Bad delimiter selection
+    - Submenus went out of the screen
+    - Submenus was not deleted (at the end, unnecessary use of memory)
+
 ### v0.8.3
 - Add a copy function (text instead of an onClick function)
 - Add WebDAV link copy option https://github.com/NastuzziSamy/files_rightclick/issues/15

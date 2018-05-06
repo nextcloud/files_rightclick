@@ -232,10 +232,20 @@ var RightClick = RightClick || {};
             div.appendTo(context);
 
             if (menu.isSubMenu) {
+                var top = context.position().top + Math.abs(div.css("marginTop").replace('px', ''));
+                var left = context.parents('.rightClick').first().innerWidth() - (Math.abs(div.css("marginLeft").replace('px', '')) / 2);
+                var right = 'auto';
+                var positionAndWidth = div.offset().left + context.parents('.rightClick').first().outerWidth() + div.outerWidth() + (Math.abs(div.css("marginLeft").replace('px', '')) * 4);
+
+                if (positionAndWidth > $(window).width()) {
+                    right = left;
+                    left = 'auto';
+                }
+
                 div.css({
-                    'left': context.parents('.rightClick').first().innerWidth() - (Math.abs(div.css("marginLeft").replace('px', '')) / 2),
-                    'right': 'auto',
-                    'top': context.position().top + Math.abs(div.css("marginTop").replace('px', ''))
+                    'left': left,
+                    'right': right,
+                    'top': top
                 });
             }
             else {
@@ -349,6 +359,9 @@ var RightClick = RightClick || {};
             if (exports.menus.hasOwnProperty(i)) {
                 if (exports.menus[i].close() === false)
                     return false;
+
+                if (exports.menus[i].isSubMenu)
+                    exports.menus.splice(i, 1);
             }
         }
 
@@ -358,8 +371,10 @@ var RightClick = RightClick || {};
     exports.closeAllSubMenus = function () {
         for (var i in exports.menus) {
             if (exports.menus.hasOwnProperty(i)) {
-                if (exports.menus[i].isSubMenu && exports.menus[i].close() === false)
-                    return false;
+                if (exports.menus[i].isSubMenu) {
+                    if (exports.menus[i].close() === false)
+                        return false;
+                }
             }
         }
 

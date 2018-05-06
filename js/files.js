@@ -8,14 +8,14 @@ var RightClick = RightClick || {};
         return false;
     }
 
+    var appName = 'files_rightclick';
     var availableApplications = [];
 
     $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications'), function (data) {
       availableApplications = data;
     });
 
-    new RightClick.Menu($('tbody[id*=fileList]'), function (event, currentFile, delimiter) {
-        var appName = 'files_rightclick';
+    new RightClick.Menu($('tbody[id=fileList]'), function (event, currentFile, delimiter) {
         var options = new RightClick.Options();
         var openSubOptions = new RightClick.Options();
 
@@ -142,7 +142,7 @@ var RightClick = RightClick || {};
             }
 
             if (text !== '') {
-                addNewOpenSubOption('WebDAV', 'public', t(appName, 'Get WebDAV link'), window.location.origin + OC.generateUrl('/remote.php/webdav' + currentFile.attr('data-path') + currentFile.attr('data-file')), false);
+                addNewOpenSubOption('WebDAV', 'public', t(appName, 'Get WebDAV link'), window.location.origin + OC.generateUrl('/remote.php/webdav') + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), false);
 
                 addNewOption('Open', icon, text, onClick, true, openSubOptions);
             }
