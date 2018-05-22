@@ -285,8 +285,8 @@ var RightClick = RightClick || {};
                 });
             }
             else {
-                var top = event.pageY + delimiter.position().top - delimiter.offset().top + 15;
-                var left = event.pageX + delimiter.position().left - delimiter.offset().left - (div.width() / 2) - 5;
+                var top = event.pageY + delimiter.position().top - delimiter.offset().top + 5;
+                var left = event.pageX + delimiter.position().left - delimiter.offset().left - 5;
                 var arrow = (div.width() / 2);
                 var space = div.outerWidth(true) - div.innerWidth();
 
@@ -310,6 +310,10 @@ var RightClick = RightClick || {};
                     }
 
                     left = newLeft;
+                }
+
+                if (top + div.outerHeight(true) >= $(window).height()) {
+                    top -= div.outerHeight(true);
                 }
 
                 div.css({
