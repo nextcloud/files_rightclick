@@ -8,12 +8,7 @@ var RightClick = RightClick || {};
         return false;
     }
 
-    var appName = 'files_rightclick';
-    var availableApplications = [];
-
-    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications'), function (data) {
-      availableApplications = data;
-    });
+    var appName = RightClick.appName;
 
     new RightClick.Menu($('tbody[id=fileList]'), function (event, currentFile, delimiter) {
         var options = new RightClick.Options();
@@ -112,14 +107,14 @@ var RightClick = RightClick || {};
             else if (mimeType === 'application/pdf') {
                 text = t(appName, 'Read PDF');
             }
-            else if (mimeType.indexOf('image') >= 0 && availableApplications.includes('gallery')) {
+            else if (mimeType.indexOf('image') >= 0 && RightClick.isAppAvailable('gallery')) {
                 text = t(appName, 'See picture');
 
                 addNewOpenSubOption('Gallery', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
                     window.open(OC.generateUrl('/apps/gallery') + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
                 });
             }
-            else if (mimeType.indexOf('audio') >= 0 && (availableApplications.includes('audioplayer') || availableApplications.includes('music'))) {
+            else if (mimeType.indexOf('audio') >= 0 && (RightClick.isAppAvailable(['audioplayer', 'music']))) {
                 var isReading = function () {
                     return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
                 };
@@ -133,7 +128,7 @@ var RightClick = RightClick || {};
                     }
                 };
             }
-            else if (mimeType.indexOf('video') >= 0 && availableApplications.includes('audioplayer')) {
+            else if (mimeType.indexOf('video') >= 0 && RightClick.isAppAvailable('audioplayer')) {
                 text = t(appName, 'Watch');
                 icon = 'play';
             }

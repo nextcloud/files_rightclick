@@ -3,6 +3,24 @@ var RightClick = RightClick || {};
 (function(window, $, exports, undefined) {
     'use strict';
 
+    exports.appName = 'files_rightclick';
+
+    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications'), function (data) {
+      exports.availableApplications = data;
+    });
+
+    exports.isAppAvailable = function (appNames) {
+        if (!(appNames instanceof Array))
+            appNames = [appNames];
+
+        for (var appName of appNames) {
+            if (exports.availableApplications.includes(appName))
+                return true;
+        }
+
+        return false;
+    }
+
     // Object where all options are listed for one (sub)menu
     exports.Options = function (options) {
         this.options = [];
@@ -56,8 +74,10 @@ var RightClick = RightClick || {};
             for (var name in this.options) {
                 var li = this.options[name].generate();
 
-                li.addClass('action-' + name);
-                ul.append(li);
+                if (li) {
+                    li.addClass('action-' + name);
+                    ul.append(li);
+                }
             }
 
             return ul;
@@ -94,6 +114,16 @@ var RightClick = RightClick || {};
         this.subOptions = subOptions;
         var option = this;
 
+        this.printIfAppEnabled = function (appName) {
+            this.appName = appName;
+            this.printIfNoApp = false;
+        }
+
+        this.enableIfAppEnabled = function (appName) {
+            this.appName = appName;
+            this.printIfNoApp = true;
+        }
+
         this.generate = function () {
             var a = $('<a>', {
                 'class': 'menu-option option-' + this.name.toLowerCase()
@@ -105,7 +135,10 @@ var RightClick = RightClick || {};
                 'text': this.text,
             });
 
-            if (this.onClick === undefined) {
+            if (this.appName && !this.printIfNoApp && !exports.isAppAvailable(this.appName))
+                return;
+
+            if (this.isDisabled()) {
                 a.attr('disabled', true).css({
                     'cursor': 'default',
                     'background-color': '#AAA'
@@ -159,6 +192,9 @@ var RightClick = RightClick || {};
         };
 
         this.isDisabled = function () {
+            if (this.appName && !exports.isAppAvailable(this.appName))
+                return true;
+
             return this.onClick === undefined;
         }
     }

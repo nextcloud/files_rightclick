@@ -12,17 +12,6 @@ class AjaxController extends Controller
      */
     public function applications()
     {
-        $availableApplications = [];
-        $applications = [
-            'gallery',
-            'audioplayer',
-            'music'
-        ];
-        foreach ($applications as $application) {
-            if (\OCP\App::isEnabled($application)) {
-                $availableApplications[] = $application;
-            }
-        }
-        return new JSONResponse($availableApplications);
+        return new JSONResponse(\OC_App::getEnabledApps());
     }
 }
