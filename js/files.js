@@ -137,7 +137,7 @@ var RightClick = RightClick || {};
             }
 
             if (text !== '') {
-                addNewOpenSubOption('WebDAV', 'public', t(appName, 'Get WebDAV link'), window.location.origin + OC.generateUrl('/remote.php/webdav') + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), false);
+                addNewOpenSubOption('WebDAV', 'public', t(appName, 'Get WebDAV link'), OC.linkToRemote('webdav' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file')), false);
 
                 addNewOption('Open', icon, text, onClick, true, openSubOptions);
             }
