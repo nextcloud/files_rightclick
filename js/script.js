@@ -182,7 +182,9 @@ var RightClick = RightClick || {};
             var li = $('<li>').append(a.append(iconSpan).append(textSpan));
 
             if (this.subOptions instanceof exports.Options && this.subOptions.getNbrOfOptions() > 0) {
-                var sub = $('<a>').append($('<span>').text('▶').css('padding-right', '10px')).attr('style', 'width: auto; padding-right: 0px !important');
+                var sub = $('<a>').append($('<span>').text('▶')
+                    .css('padding-right', '10px')).addClass('rightClickArrow')
+                    .attr('style', 'width: auto; padding-right: 0px !important');
 
                 new exports.Menu(sub, this.subOptions).setContext(li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
                 li.append(sub);
@@ -328,9 +330,6 @@ var RightClick = RightClick || {};
 
             if (optionsDisabled)
                 div.css('background-color', '#AAA');
-
-            if (!menu.isSubMenu)
-                $('style.rightClickStyle').text('#rightClickMenu:after{transform:translateX(-50%);left:' + arrow + 'px;' + (optionsDisabled || options.isFirstDisabled() ? 'border-bottom-color:#AAA;' : '') + '} .rightSubMenu:after{display:none}');
 
             div.on('mouseleave', function (event) {
                 if (menu.isOpenedOnHover)
