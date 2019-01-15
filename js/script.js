@@ -287,21 +287,17 @@ var RightClick = RightClick || {};
                 });
             }
             else {
-                var getCssPx = function (context, css) {
-                    return -- context.css(css).replace('px', '');
-                }
-
-                var top = event.pageY + delimiter.position().top - delimiter.offset().top + getCssPx(context, "marginTop") + 5;
-                var left = event.pageX + delimiter.position().left - delimiter.offset().left - getCssPx(context, "marginLeft") - 5;
+                var top = event.pageY + delimiter.position().top - delimiter.offset().top + Math.abs(delimiter.css("marginTop").replace('px', '')) + 5;
+                var left = event.pageX + delimiter.position().left - delimiter.offset().left - Math.abs(delimiter.css("marginLeft").replace('px', '')) - 5;
 
                 if (left < 0) {
                     left = 0;
                 }
-                else if (left + div.outerWidth(true) >= delimiter.width() - getCssPx(context, "marginRight")) {
+                else if (left + div.outerWidth(true) >= delimiter.width() - Math.abs(delimiter.css("marginRight").replace('px', ''))) {
                     left = delimiter.width() - div.outerWidth(true) - 1;
                 }
 
-                if (top + div.outerHeight(true) >= $(window).height() - getCssPx(context, "marginBottom")) {
+                if (top + div.outerHeight(true) >= $(window).height() - Math.abs(delimiter.css("marginBottom").replace('px', ''))) {
                     top -= div.outerHeight(true);
                 }
 

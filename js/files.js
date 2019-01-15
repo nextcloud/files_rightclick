@@ -1,5 +1,3 @@
-var RightClick = RightClick || {};
-
 (function(window, $, RightClick, undefined) {
     'use strict';
 
