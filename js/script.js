@@ -287,34 +287,21 @@ var RightClick = RightClick || {};
                 });
             }
             else {
-                var top = event.pageY + delimiter.position().top - delimiter.offset().top + 5;
-                var left = event.pageX + delimiter.position().left - delimiter.offset().left - 5;
-                var arrow = (div.width() / 2);
-                var space = div.outerWidth(true) - div.innerWidth();
+                var getCssPx = function (context, css) {
+                    return -- context.css(css).replace('px', '');
+                }
+
+                var top = event.pageY + delimiter.position().top - delimiter.offset().top + getCssPx(context, "marginTop") + 5;
+                var left = event.pageX + delimiter.position().left - delimiter.offset().left - getCssPx(context, "marginLeft") - 5;
 
                 if (left < 0) {
-                    arrow += left;
-
-                    if (arrow < space) {
-                        arrow = space;
-                        div.css('border-top-left-radius', 0);
-                    }
-
                     left = 0;
                 }
-                else if (left + div.outerWidth(true) >= delimiter.width()) {
-                    var newLeft = delimiter.width() - div.outerWidth(true) - 1;
-                    arrow += left - newLeft;
-
-                    if (arrow > div.width() - space) {
-                        arrow = div.width() - space;
-                        div.css('border-top-right-radius', 0);
-                    }
-
-                    left = newLeft;
+                else if (left + div.outerWidth(true) >= delimiter.width() - getCssPx(context, "marginRight")) {
+                    left = delimiter.width() - div.outerWidth(true) - 1;
                 }
 
-                if (top + div.outerHeight(true) >= $(window).height()) {
+                if (top + div.outerHeight(true) >= $(window).height() - getCssPx(context, "marginBottom")) {
                     top -= div.outerHeight(true);
                 }
 

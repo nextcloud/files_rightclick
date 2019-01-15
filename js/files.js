@@ -10,10 +10,10 @@ var RightClick = RightClick || {};
 
     var appName = RightClick.appName;
 
-    new RightClick.Menu($('tbody[id=fileList]'), function (event, currentFile, delimiter) {
+    new RightClick.Menu($('tbody[id=fileList]'), function (event, context, delimiter) {
         var options = new RightClick.Options();
         var openSubOptions = new RightClick.Options();
-
+        var currentFile = $(event.target).closest('tr');
         currentFile.find('.action-menu').click();
 
         var menu = currentFile.find('.fileActionsMenu');
@@ -170,6 +170,6 @@ var RightClick = RightClick || {};
 
         return options;
     }, $('#controls').css('z-index') - 1).setContext(function (event) {
-        return $(event.target).closest('tr');
+        return $('#app-content-files #fileList');
     });
 })(window, jQuery, RightClick);
