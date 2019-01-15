@@ -1,4 +1,8 @@
 # Changelogs
+### v0.9.1
+- Update calcul and disposition
+- Improve display
+
 ### v0.9.0
 - App compatible with NC 15/16 (https://github.com/NastuzziSamy/files_rightclick/pull/35 thanks to @nextgen-networks, linked to https://github.com/NastuzziSamy/files_rightclick/issues/34 thanks to @violoncelloCH)
 - Right click arrows have now a class (https://github.com/NastuzziSamy/files_rightclick/issues/26 thanks to @blackcrack)
