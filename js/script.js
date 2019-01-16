@@ -208,7 +208,7 @@ var RightClick = RightClick || {};
         this.currentContext = undefined;
         this.options = options || new exports.Options();
         this.params = {
-            'z-index': zIndex || 100
+            'z-index': zIndex || 1000
         };
         this.onClose = onClose;
         this.isSubMenu = false;
@@ -248,6 +248,8 @@ var RightClick = RightClick || {};
             menu.attachedEvent = event;
             menu.isOpened = true;
 
+            exports.prepare();
+
             if (typeof context === "function")
                 context = context(event);
 
@@ -260,48 +262,53 @@ var RightClick = RightClick || {};
             if (options.getNbrOfOptions() === 0)
                 return;
 
-            var div = $('<div>', menu.isSubMenu ? {
+            menu.element = $('<div>', menu.isSubMenu ? {
                 'class': 'rightClick rightSubMenu bubble open'
             } : {
                 'id': 'rightClickMenu',
                 'class': 'rightClick bubble open'
             }).append(options.generate());
 
-            div.appendTo(context);
+            menu.element.appendTo(exports.container);
 
             if (menu.isSubMenu) {
-                var top = context.position().top + Math.abs(div.css("marginTop").replace('px', ''));
-                var left = context.parents('.rightClick').first().innerWidth() - (Math.abs(div.css("marginLeft").replace('px', '')) / 2);
+                var top = context.position().top + parseInt(menu.element.css("marginTop").replace('px', ''));
+                var left = context.parents('.rightClick').first().innerWidth() - (parseInt(menu.element.css("marginLeft").replace('px', '')) / 2);
                 var right = 'auto';
-                var positionAndWidth = div.offset().left + context.parents('.rightClick').first().outerWidth() + div.outerWidth() + (Math.abs(div.css("marginLeft").replace('px', '')) * 4);
+                var positionAndWidth = menu.element.offset().left + context.parents('.rightClick').first().outerWidth() + menu.element.outerWidth() + (parseInt(menu.element.css("marginLeft").replace('px', '')) * 4);
 
                 if (positionAndWidth > $(window).width()) {
                     right = left;
                     left = 'auto';
                 }
 
-                div.css({
+                menu.element.css({
                     'left': left,
                     'right': right,
                     'top': top
                 });
             }
             else {
-                var top = event.pageY + delimiter.position().top - delimiter.offset().top + Math.abs(delimiter.css("marginTop").replace('px', '')) + 5;
-                var left = event.pageX + delimiter.position().left - delimiter.offset().left - Math.abs(delimiter.css("marginLeft").replace('px', '')) - 5;
+                var top = event.clientY - parseInt(menu.element.css("marginTop").replace('px', ''));
+                var left = event.clientX - parseInt(menu.element.css("marginLeft").replace('px', ''));
+                var height = menu.element.outerHeight();
+                var width = menu.element.outerWidth();
 
+                if (left + width >= $(window).width()) {
+                    left -= width;
+                }
+                if (top + height >= $(window).height()) {
+                    top -= height;
+                }
+
+                if (top < 0) {
+                    top = 0;
+                }
                 if (left < 0) {
                     left = 0;
                 }
-                else if (left + div.outerWidth(true) >= delimiter.width() - Math.abs(delimiter.css("marginRight").replace('px', ''))) {
-                    left = delimiter.width() - div.outerWidth(true) - 1;
-                }
 
-                if (top + div.outerHeight(true) >= $(window).height() - Math.abs(delimiter.css("marginBottom").replace('px', ''))) {
-                    top -= div.outerHeight(true);
-                }
-
-                div.css({
+                menu.element.css({
                     'top': top,
                     'left': left,
                     'right': 'auto',
@@ -312,14 +319,13 @@ var RightClick = RightClick || {};
             var optionsDisabled = options.isDisabled();
 
             if (optionsDisabled)
-                div.css('background-color', '#AAA');
+                menu.element.css('background-color', '#AAA');
 
-            div.on('mouseleave', function (event) {
+            menu.element.on('mouseleave', function (event) {
                 if (menu.isOpenedOnHover)
                     menu.close();
             });
 
-            $('body').on('click contextmenu', exports.closeAllMenus);
             return false;
         };
 
@@ -327,18 +333,18 @@ var RightClick = RightClick || {};
             if (!this.isOpened)
                 return true;
 
-            var openedMenu = this.currentContext ? this.currentContext.find('.rightClick') : this.delimiter.find('.rightClick');
-
-            if (openedMenu.length > 0) {
-                if (this.onClose) {
-                    if (this.onClose(this.attachedEvent, this.currentContext, this.delimiter) === false)
-                        return false;
-                }
-
-                openedMenu.remove();
+            if (this.onClose) {
+                if (this.onClose(this.attachedEvent, this.currentContext, this.delimiter) === false)
+                    return false;
             }
 
             this.isOpened = false;
+            if (this.element)
+                this.element.remove();
+
+            if (!exports.isAMenuOpen())
+                exports.clean();
+
             return true;
         };
 
@@ -377,13 +383,13 @@ var RightClick = RightClick || {};
     };
 
     exports.closeAllMenus = function () {
-        for (var i in exports.menus) {
-            if (exports.menus.hasOwnProperty(i)) {
-                if (exports.menus[i].close() === false)
+        for (var key in exports.menus) {
+            if (exports.menus.hasOwnProperty(key)) {
+                if (exports.menus[key].close() === false)
                     return false;
 
-                if (exports.menus[i].isSubMenu)
-                    exports.menus.splice(i, 1);
+                if (exports.menus[key].isSubMenu)
+                    exports.menus.splice(key, 1);
             }
         }
 
@@ -391,10 +397,10 @@ var RightClick = RightClick || {};
     }
 
     exports.closeAllSubMenus = function () {
-        for (var i in exports.menus) {
-            if (exports.menus.hasOwnProperty(i)) {
-                if (exports.menus[i].isSubMenu) {
-                    if (exports.menus[i].close() === false)
+        for (var key in exports.menus) {
+            if (exports.menus.hasOwnProperty(key)) {
+                if (exports.menus[key].isSubMenu) {
+                    if (exports.menus[key].close() === false)
                         return false;
                 }
             }
@@ -403,5 +409,38 @@ var RightClick = RightClick || {};
         return true;
     }
 
-    $('<style class="rightClickStyle"></style>').appendTo('head');
+    exports.isAMenuOpen = function () {
+        for (var key in exports.menus) {
+            if (exports.menus.isOpened) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    exports.prepare = function () {
+        $(window).on('resize', exports.closeAllMenus);
+        $('body').on('click contextmenu', exports.closeAllMenus);
+        $('body').css({
+            'height': '100%',
+            'overflow': 'hidden'
+        });
+    }
+
+    exports.clean = function () {
+        $(window).off('resize', exports.closeAllMenus);
+        $('body').off('click contextmenu', exports.closeAllMenus);
+        $('body').css({
+            'height': 'auto',
+            'overflow': 'auto'
+        });
+    }
+
+    exports.container = $('<div id="rightClickContainer"></div>').css({
+        'position': 'fixed',
+        'top': '0',
+        'left': '0',
+        'z-index': '1000',
+    }).appendTo('body');
 })(window, jQuery, RightClick);
