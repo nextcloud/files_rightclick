@@ -19,7 +19,7 @@ var RightClick = RightClick || {};
         }
 
         return false;
-    }
+    };
 
     // Object where all options are listed for one (sub)menu
     exports.Options = function (options) {
@@ -27,7 +27,7 @@ var RightClick = RightClick || {};
 
         this.getIndexFromOptionName = function (name) {
             return this.getNbrOfOptions(); // TODO
-        }
+        };
 
         // Add one or more options
         this.add = function (options, index) {
@@ -61,11 +61,11 @@ var RightClick = RightClick || {};
 
         this.prepend = function (options) {
             return this.add(options, 0);
-        }
+        };
 
         this.append = function (options) {
             return this.add(options, this.getNbrOfOptions());
-        }
+        };
 
         // Generate all options html
         this.generate = function () {
@@ -81,11 +81,11 @@ var RightClick = RightClick || {};
             }
 
             return ul;
-        }
+        };
 
         this.getNbrOfOptions = function () {
             return this.options.length;
-        }
+        };
 
         this.isDisabled = function () {
             for (var name in this.options) {
@@ -94,17 +94,17 @@ var RightClick = RightClick || {};
             }
 
             return true;
-        }
+        };
 
         this.isFirstDisabled = function () {
             if (this.getNbrOfOptions() === 0)
                 return true;
             else
                 return this.options[Object.keys(this.options)[0]].isDisabled();
-        }
+        };
 
         this.add(options);
-    }
+    };
 
     exports.Option = function (name, text, icon, onClick, subOptions) {
         this.name = name;
@@ -186,7 +186,7 @@ var RightClick = RightClick || {};
                     .css('padding-right', '10px')).addClass('rightClickArrow')
                     .attr('style', 'width: auto; padding-right: 0px !important');
 
-                new exports.Menu(sub, this.subOptions).setContext(li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
+                new exports.Menu(sub, this.subOptions, li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
                 li.append(sub);
             }
 
@@ -198,21 +198,17 @@ var RightClick = RightClick || {};
                 return true;
 
             return this.onClick === undefined;
-        }
-    }
+        };
+    };
 
     exports.menus = [];
-    exports.Menu = function (delimiter, options, zIndex, onClose) {
+    exports.Menu = function (delimiter, options, context, onClose) {
         this.delimiter = $(delimiter);
-        this.context = undefined;
+        this.context = context;
         this.currentContext = undefined;
         this.options = options || new exports.Options();
-        this.params = {
-            'z-index': zIndex || 1000
-        };
         this.onClose = onClose;
         this.isSubMenu = false;
-        this.isOpened = false;
 
         if (delimiter === undefined)
             return undefined;
@@ -225,6 +221,10 @@ var RightClick = RightClick || {};
 
             return this;
         };
+
+        this.isOpened = function () {
+            return this.element !== undefined;
+        }
 
         var onClick = function (event) {
             event.stopPropagation();
@@ -242,13 +242,12 @@ var RightClick = RightClick || {};
             else if (!exports.closeAllMenus())
                 return false;
 
-            if (menu.isOpened)
+            if (menu.isOpened())
                 return false;
 
-            menu.attachedEvent = event;
-            menu.isOpened = true;
-
             exports.prepare();
+
+            menu.attachedEvent = event;
 
             if (typeof context === "function")
                 context = context(event);
@@ -301,7 +300,7 @@ var RightClick = RightClick || {};
                 'top': top,
                 'left': left,
                 'right': 'auto',
-                'z-index': params['z-index']
+                'z-index': 10000
             });
 
             var optionsDisabled = options.isDisabled();
@@ -318,34 +317,34 @@ var RightClick = RightClick || {};
         };
 
         this.close = function () {
-            if (!this.isOpened)
+            if (!this.isOpened())
                 return true;
 
-            if (this.onClose) {
-                if (this.onClose(this.attachedEvent, this.currentContext, this.delimiter) === false)
-                    return false;
-            }
+            if (this.element) {
+                if (this.onClose) {
+                    if (this.onClose(this.attachedEvent, this.currentContext, this.delimiter) === false)
+                        return false;
+                }
 
-            this.isOpened = false;
-            if (this.element)
                 this.element.remove();
+                delete this.element;
 
-            if (!exports.isAMenuOpen())
-                exports.clean();
+                if (!exports.isAMenuOpen())
+                    exports.clean();
+            }
 
             return true;
         };
 
         this.setAlsoOnLeftClick = function () {
             this.delimiter.on('click', function (event) {
-                if (menu.isOpened && !menu.isOpenedOnHover) {
+                if (menu.isOpened() && !menu.isOpenedOnHover) {
                     menu.close();
 
                     return false;
                 }
 
                 menu.isOpenedOnHover = false;
-                menu.isOpened = true;
             }).on('click', onClick);
 
             return this;
@@ -353,7 +352,6 @@ var RightClick = RightClick || {};
 
         this.setAlsoOnHover = function () {
             this.delimiter.on('mouseenter', function (event) {
-                menu.isOpened = true;
                 menu.isOpenedOnHover = true;
             }).on('mouseenter', onClick);
 
@@ -382,7 +380,7 @@ var RightClick = RightClick || {};
         }
 
         return true;
-    }
+    };
 
     exports.closeAllSubMenus = function () {
         for (var key in exports.menus) {
@@ -395,17 +393,17 @@ var RightClick = RightClick || {};
         }
 
         return true;
-    }
+    };
 
     exports.isAMenuOpen = function () {
         for (var key in exports.menus) {
-            if (exports.menus.isOpened) {
+            if (exports.menus[key].isOpened()) {
                 return true;
             }
         }
 
         return false;
-    }
+    };
 
     exports.prepare = function () {
         $(window).on('resize', exports.closeAllMenus);
@@ -414,7 +412,7 @@ var RightClick = RightClick || {};
             'height': '100%',
             'overflow': 'hidden'
         });
-    }
+    };
 
     exports.clean = function () {
         $(window).off('resize', exports.closeAllMenus);
@@ -423,7 +421,7 @@ var RightClick = RightClick || {};
             'height': 'auto',
             'overflow': 'auto'
         });
-    }
+    };
 
     exports.container = $('<div id="rightClickContainer"></div>').css({
         'position': 'fixed',
