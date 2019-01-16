@@ -272,49 +272,37 @@ var RightClick = RightClick || {};
             menu.element.appendTo(exports.container);
 
             if (menu.isSubMenu) {
-                var top = context.position().top + parseInt(menu.element.css("marginTop").replace('px', ''));
-                var left = context.parents('.rightClick').first().innerWidth() - (parseInt(menu.element.css("marginLeft").replace('px', '')) / 2);
-                var right = 'auto';
-                var positionAndWidth = menu.element.offset().left + context.parents('.rightClick').first().outerWidth() + menu.element.outerWidth() + (parseInt(menu.element.css("marginLeft").replace('px', '')) * 4);
-
-                if (positionAndWidth > $(window).width()) {
-                    right = left;
-                    left = 'auto';
-                }
-
-                menu.element.css({
-                    'left': left,
-                    'right': right,
-                    'top': top
-                });
+                var top = context.parents('.rightClick').first().offset().top - parseInt(menu.element.css("marginTop").replace('px', ''));
+                var left = context.offset().left + context.parents('.rightClick').first().innerWidth() - (parseInt(menu.element.css("marginLeft").replace('px', '')) / 2);
             }
             else {
                 var top = event.clientY - parseInt(menu.element.css("marginTop").replace('px', ''));
                 var left = event.clientX - parseInt(menu.element.css("marginLeft").replace('px', ''));
-                var height = menu.element.outerHeight();
-                var width = menu.element.outerWidth();
-
-                if (left + width >= $(window).width()) {
-                    left -= width;
-                }
-                if (top + height >= $(window).height()) {
-                    top -= height;
-                }
-
-                if (top < 0) {
-                    top = 0;
-                }
-                if (left < 0) {
-                    left = 0;
-                }
-
-                menu.element.css({
-                    'top': top,
-                    'left': left,
-                    'right': 'auto',
-                    'z-index': params['z-index']
-                });
             }
+
+            var height = menu.element.outerHeight();
+            var width = menu.element.outerWidth();
+
+            if (left + width >= $(window).width()) {
+                left -= width;
+            }
+            if (top + height >= $(window).height()) {
+                top -= height;
+            }
+
+            if (top < 0) {
+                top = 0;
+            }
+            if (left < 0) {
+                left = 0;
+            }
+
+            menu.element.css({
+                'top': top,
+                'left': left,
+                'right': 'auto',
+                'z-index': params['z-index']
+            });
 
             var optionsDisabled = options.isDisabled();
 
