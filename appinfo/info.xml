@@ -5,12 +5,12 @@
     <name>Files Right Click</name>
     <summary>Add a rightclick menu generator for any Nextcloud apps</summary>
     <description><![CDATA[This app will allow users but also developers to have a right click menu. Simply use the RightClick object to create quickly and easly menus. Already files app got a right click menu]]></description>
-    <version>0.9.1</version>
+    <version>0.10.0</version>
     <licence>AGPL</licence>
     <author mail="samy@nastuzzi.fr" homepage="https://github.com/NastuzziSamy/files_rightclick.git">NASTUZZI Samy</author>
     <namespace>FilesRightClick</namespace>
-    <category>files</category>
     <category>tools</category>
+    <category>files</category>
     <website>https://github.com/NastuzziSamy/files_rightclick</website>
     <repository>https://github.com/NastuzziSamy/files_rightclick</repository>
     <bugs>https://github.com/NastuzziSamy/files_rightclick/issues</bugs>

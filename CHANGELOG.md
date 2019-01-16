@@ -1,4 +1,9 @@
 # Changelogs
+### v0.10.0
+- Change menu generation and handler
+- Update calcul and disposition for menus and sub-menus
+- Fix selected actions
+
 ### v0.9.1
 - Update calcul and disposition
 - Improve display
