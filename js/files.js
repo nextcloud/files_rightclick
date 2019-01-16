@@ -12,11 +12,12 @@
         var options = new RightClick.Options();
         var openSubOptions = new RightClick.Options();
         var currentFile = $(event.target).closest('tr');
+        var selectedActions = '.selectedActions .menu-center li';
         currentFile.find('.action-menu').click();
+        $('.actions-selected').click().click();
 
         var menu = currentFile.find('.fileActionsMenu');
         var menuStyle = $('style.rightClickStyle');
-        var selectedActionsList = $('.selectedActions');
         var generateNewOption = function (action, icon, text, onClick, prepend, subOptions) {
             return new RightClick.Option(action, text, 'icon-' + icon, typeof onClick === 'function' ? function (event, context) {
                 event.stopPropagation();
@@ -62,16 +63,12 @@
                 $(currentFile.find('input.selectCheckBox')).click();
             });
 
-            $.each(selectedActionsList, function (i, selectedActions) {
-                $.each($(selectedActions).find('a'), function (j, selectedAction) {
-                    var action = $(selectedAction);
+            $.each($('.selectedActions .menu-center li'), function (i, selectedAction) {
+                var action = $(selectedAction);
 
-                    if (action.is(":visible")) {
-                        addNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
-                            action.click()
-                        }, false);
-                    }
-                });
+                addNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
+                    action.find('a').click();
+                }, false);
             });
         }
         else {
@@ -167,7 +164,5 @@
         }, 250);
 
         return options;
-    }, $('#controls').css('z-index') - 1).setContext(function (event) {
-        return $('#app-content-files #fileList');
-    });
+    }, $('#app-content-files #fileList'));
 })(window, jQuery, RightClick);
