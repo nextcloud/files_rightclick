@@ -13,8 +13,8 @@ var RightClick = RightClick || {};
         if (!(appNames instanceof Array))
             appNames = [appNames];
 
-        for (var appName of appNames) {
-            if (exports.availableApplications.includes(appName))
+        for (var i = 0; i < appNames.length; i++) {
+            if (exports.availableApplications.includes(appNames[i]))
                 return true;
         }
 

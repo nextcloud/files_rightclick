@@ -23,7 +23,7 @@
 
 # TODOs
 - [x] Add a context menu for files applications (Files and Files_Sharing)
-- [ ] Add custom options for each files:
+- [x] Add custom options for each files:
     - [x] Open option (detect the file type)
     - [x] Check or uncheck option
     - [x] Adapt sharing and copy/move options with selected files
@@ -35,5 +35,4 @@
 - [ ] Add a context menu to create files or directories
 - [ ] Add a context menu in each icon apps
 - [x] Add sub menu compatibility in context menu
-- [ ] Publish a new app (with a different name) and allow any app to create its own context menu(s)
-- [ ] Backport to NC 12
+- [x] Backport to NC 12
