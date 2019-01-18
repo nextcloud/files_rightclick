@@ -7,10 +7,13 @@
   "See picture" : "Afbeelding bekijken",
   "Open in Gallery" : "Openen in galerij",
   "Play" : "Afspelen",
+  "Play/Pause" : "Afspelen/Pauzeren",
   "Stop playback" : "Afspelen stoppen",
   "Watch" : "Video bekijken",
   "Share folder" : "Map delen",
   "Share file" : "Bestand delen",
   "Select" : "Selecteren",
   "Unselect" : "Selectie opheffen",
+  "Get WebDAV link" : "Toon WebDAV link",
+  "Copied !": "Gekopieerd !"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
