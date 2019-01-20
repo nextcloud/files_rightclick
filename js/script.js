@@ -271,8 +271,10 @@ var RightClick = RightClick || {};
             menu.element.appendTo(exports.container);
 
             if (menu.isSubMenu) {
-                var top = context.parents('.rightClick').first().offset().top - parseInt(menu.element.css("marginTop").replace('px', ''));
-                var left = context.offset().left + context.parents('.rightClick').first().innerWidth() - (parseInt(menu.element.css("marginLeft").replace('px', '')) / 2);
+                var menuPosition = context.parents('.rightClick').first().position();
+                var contextPosition = context.position();
+                var top = menuPosition.top - contextPosition.top;
+                var left = menuPosition.left + context.width() + 2;
             }
             else {
                 var top = event.clientY - parseInt(menu.element.css("marginTop").replace('px', ''));
@@ -408,25 +410,14 @@ var RightClick = RightClick || {};
     exports.prepare = function () {
         $(window).on('resize', exports.closeAllMenus);
         $('body').on('click contextmenu', exports.closeAllMenus);
-        $('body').css({
-            'height': '100%',
-            'overflow': 'hidden'
-        });
+        $('body').addClass('rightClick-fixed');
     };
 
     exports.clean = function () {
         $(window).off('resize', exports.closeAllMenus);
         $('body').off('click contextmenu', exports.closeAllMenus);
-        $('body').css({
-            'height': 'auto',
-            'overflow': 'auto'
-        });
+        $('body').removeClass('rightClick-fixed');
     };
 
-    exports.container = $('<div id="rightClickContainer"></div>').css({
-        'position': 'fixed',
-        'top': '0',
-        'left': '0',
-        'z-index': '1000',
-    }).appendTo('body');
+    exports.container = $('<div id="rightClickContainer"></div>').appendTo('body');
 })(window, jQuery, RightClick);
