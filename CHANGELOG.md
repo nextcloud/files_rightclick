@@ -1,4 +1,8 @@
 # Changelogs
+### 0.10.2
+- Fix submenus auto scrolling (https://github.com/NastuzziSamy/files_rightclick/issues/40 thanks to @worldworm)
+- Add Dutch translations (https://github.com/NastuzziSamy/files_rightclick/pull/43 thanks to @joklaps)
+
 ### 0.10.1
 - Fix IE11 incompatibily (https://github.com/NastuzziSamy/files_rightclick/issues/39 thanks to @geokh)
 - Improve changelogs (https://github.com/NastuzziSamy/files_rightclick/issues/21 thanks to @lachmanfrantisek)
