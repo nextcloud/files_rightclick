@@ -331,8 +331,7 @@ var RightClick = RightClick || {};
                 this.element.remove();
                 delete this.element;
 
-                if (!exports.isAMenuOpen())
-                    exports.clean();
+                exports.clean();
             }
 
             return true;
@@ -375,9 +374,6 @@ var RightClick = RightClick || {};
             if (exports.menus.hasOwnProperty(key)) {
                 if (exports.menus[key].close() === false)
                     return false;
-
-                if (exports.menus[key].isSubMenu)
-                    exports.menus.splice(key, 1);
             }
         }
 
@@ -397,10 +393,13 @@ var RightClick = RightClick || {};
         return true;
     };
 
-    exports.isAMenuOpen = function () {
-        for (var key in exports.menus) {
+    exports.isAMenuOpened = function (key) {
+        for (key; key < exports.menus.length; key++) {
             if (exports.menus[key].isOpened()) {
                 return true;
+            }
+            else {
+                return exports.isAMenuOpened(++key);
             }
         }
 
@@ -408,15 +407,40 @@ var RightClick = RightClick || {};
     };
 
     exports.prepare = function () {
-        $(window).on('resize', exports.closeAllMenus);
-        $('body').on('click contextmenu', exports.closeAllMenus);
-        $('body').addClass('rightClick-fixed');
+        if (!exports.isAMenuOpened()) {
+            $(window).on('resize', exports.closeAllMenus);
+            $('body').on('click contextmenu', exports.closeAllMenus);
+            $('body').addClass('rightClick-fixed');
+        }
+    }
+
+    exports.onKeyUp = function (event) {
+        event = event || window.event;
+        var isEscape = false;
+
+        if ("key" in event) {
+            isEscape = (event.key == "Escape" || event.key == "Esc");
+        } else {
+            isEscape = (event.keyCode === 27);
+        }
+
+        if (isEscape) {
+            var length = exports.menus.length;
+
+            if (length) {
+                exports.closeAllMenus();
+            }
+        }
     };
 
     exports.clean = function () {
-        $(window).off('resize', exports.closeAllMenus);
-        $('body').off('click contextmenu', exports.closeAllMenus);
-        $('body').removeClass('rightClick-fixed');
+        if (!exports.isAMenuOpened()) {
+            $(window).off('resize', exports.closeAllMenus);
+            $('body').off('click contextmenu', exports.closeAllMenus);
+            $('body').removeClass('rightClick-fixed');
+
+            document.onkeyup = exports.onKeyUp;
+        }
     };
 
     exports.container = $('<div id="rightClickContainer"></div>').appendTo('body');
