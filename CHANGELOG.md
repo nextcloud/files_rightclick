@@ -1,4 +1,8 @@
 # Changelogs
+## 0.11.1
+- Add Norwegian translation (https://github.com/NastuzziSamy/files_rightclick/pull/48 thanks to @apiraino)
+- Add Italian translation (https://github.com/NastuzziSamy/files_rightclick/pull/49 thanks to @apiraino)
+
 ## 0.11.0
 - Add Spanish translation (https://github.com/NastuzziSamy/files_rightclick/pull/45 thanks to @Teshynil)
 - Add Escape button management (close all menus)
