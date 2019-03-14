@@ -49,7 +49,7 @@ appstore: clean
 	--exclude=tests \
 	--exclude=vendor/bin \
 	$(project_dir) $(sign_dir)
-	sed -i '/default_enabled/d' $(sign_dir)/$(app_name)/appinfo/info.xml
+	sed -i '/default_enable/d' $(sign_dir)/$(app_name)/appinfo/info.xml
 	tar -czf $(build_dir)/$(app_name).tar.gz \
 		-C $(sign_dir) $(app_name)
 	openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key $(build_dir)/$(app_name).tar.gz | openssl base64 > $(build_dir)/$(app_name).b64
