@@ -1,4 +1,9 @@
 # Changelogs
+## 0.12.0
+- The app repository was transfered to Nextcloud in order to ship the Right click app by default.
+- Update README.md and info.xml
+- Remove the very specific option: WebDAV link
+
 ## 0.11.1
 - Add Norwegian translation (https://github.com/NastuzziSamy/files_rightclick/pull/48 thanks to @apiraino)
 - Add Italian translation (https://github.com/NastuzziSamy/files_rightclick/pull/49 thanks to @apiraino)

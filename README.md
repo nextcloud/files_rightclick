@@ -1,6 +1,7 @@
-# Files Right Click (Nextcloud app)
-  Add a simple right click menu on the Files Nextcloud app.
-  Add also some open options in function of the file type
+# Right Click (Nextcloud app)
+  This app allows users and developers to have a right click menu.
+  Simply use the RightClick object to quickly create context menus.
+  The Files app already shows the actions menu when right clicking on files and folders.
 
 # Some screenshots
 ## Folder context menu
@@ -21,18 +22,7 @@
 - Audio files: start and stop playing
 - Video files: start watching
 
-# TODOs
-- [x] Add a context menu for files applications (Files and Files_Sharing)
-- [x] Add custom options for each files:
-    - [x] Open option (detect the file type)
-    - [x] Check or uncheck option
-    - [x] Adapt sharing and copy/move options with selected files
-    - [x] WebDAV link option
-- [x] Detect if an app is installed
-- [x] Split js files
-- [x] Use strict mode
-- [x] Create a context menu generator
-- [ ] Add a context menu to create files or directories
-- [ ] Add a context menu in each icon apps
-- [x] Add sub menu compatibility in context menu
-- [x] Backport to NC 12
+# Development setup
+1. ☁ Clone the app into the apps folder of your Nextcloud: `git clone https://github.com/nextcloud/files_rightclick.git`
+2. ✔️ Enable the app through the app management of your Nextcloud
+3. 🎉 Help fix some [issues](https://github.com/nextcloud/files_rightclick/issues) and [review pull requests](https://github.com/nextcloud/files_rightclick/pulls) 👍
