@@ -18,4 +18,5 @@
     <dependencies>
         <nextcloud min-version="10" max-version="17" />
     </dependencies>
+    <default_enabled />
 </info>
