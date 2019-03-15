@@ -13,7 +13,8 @@
         var currentFile = $(event.target).closest('tr');
         var selectedActions = '.selectedActions .menu-center li';
         currentFile.find('.action-menu').click();
-        $('.actions-selected').click().click();
+        $('.filesSelectMenu').css('visibility', 'hidden');
+        $('.actions-selected').click();
 
         var menu = currentFile.find('.fileActionsMenu');
         var menuStyle = $('style.rightClickStyle');
@@ -110,8 +111,10 @@
         setTimeout(function () {
             currentFile.find('.action-menu').click();
             $('.fileActionsMenu').css('visibility', 'hidden');
-        }, 250);
+        }, 100);
 
         return options;
-    }, $('#app-content-files #fileList'));
+    }, $('#app-content-files #fileList'), function () {
+        $('.filesSelectMenu').css('visibility', 'visible');
+    });
 })(window, jQuery, RightClick);
