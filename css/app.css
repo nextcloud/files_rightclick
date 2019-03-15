@@ -15,11 +15,11 @@
     z-index: 100000;
 }
 
-.rightClick.bubble:after {
+.rightClickMenu.bubble:after {
     display: none;
 }
 
-.rightClick-fixed {
+.rightClickOpened {
     height: 100% !important;
     overflow: hidden !important;
 }

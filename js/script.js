@@ -4,6 +4,15 @@ var RightClick = RightClick || {};
     'use strict';
 
     exports.appName = 'files_rightclick';
+    exports.selectors = {
+        containerId: 'rightClickMenus',
+        detectorId: 'rightClickDetector',
+        menuId: 'rightClickMenu',
+        menuClass: 'rightClickMenu',
+        subMenuClass: 'rightClickSubMenu',
+        openedClass: 'rightClickOpened',
+        arrowClass: 'rightClickArrow',
+    };
 
     // Object where all options are listed for one (sub)menu
     exports.Options = function (options) {
@@ -167,7 +176,7 @@ var RightClick = RightClick || {};
 
             if (this.subOptions instanceof exports.Options && this.subOptions.getNbrOfOptions() > 0) {
                 var sub = $('<a>').append($('<span>').text('▶')
-                    .css('padding-right', '10px')).addClass('rightClickArrow')
+                    .css('padding-right', '10px')).addClass(exports.selectors.arrowClass)
                     .attr('style', 'width: auto; padding-right: 0px !important');
 
                 new exports.Menu(sub, this.subOptions, li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
@@ -256,11 +265,13 @@ var RightClick = RightClick || {};
                 return !exports.clean();
             }
 
+            var className = exports.selectors.menuClass + ' bubble open';
+
             menu.element = $('<div>', menu.isSubMenu ? {
-                'class': 'rightClick rightSubMenu bubble open'
+                'class': exports.selectord.subMenuClass +  ' ' + className
             } : {
-                'id': 'rightClickMenu',
-                'class': 'rightClick bubble open'
+                'id': exports.selectors.menuId,
+                'class': className
             }).append(options.generate());
 
             menu.element.appendTo(exports.container);
@@ -389,7 +400,7 @@ var RightClick = RightClick || {};
     };
 
     exports.isAMenuOpened = function () {
-        for (let key = 0; key < exports.menus.length; key++) {
+        for (var key = 0; key < exports.menus.length; key++) {
             if (exports.menus[key].isOpened()) {
                 return true;
             }
@@ -401,10 +412,10 @@ var RightClick = RightClick || {};
     exports.prepare = function () {
         if (!exports.isAMenuOpened()) {
             $(window).on('resize', exports.closeAllMenus);
-            $('body').addClass('rightClick-fixed');
+            $('body').addClass(exports.selectors.openedClass);
         }
 
-        $('#rightClickDetector').css('display', 'block');
+        $('#' + exports.selectors.detectorId).css('display', 'block');
     }
 
     exports.onKeyUp = function (event) {
@@ -429,8 +440,8 @@ var RightClick = RightClick || {};
     exports.clean = function () {
         if (!exports.isAMenuOpened()) {
             $(window).off('resize', exports.closeAllMenus);
-            $('body').removeClass('rightClick-fixed');
-            $('#rightClickDetector').css('display', 'none');
+            $('body').removeClass(exports.selectors.openedClass);
+            $('#' + exports.selectors.detectorId).css('display', 'none');
 
             return true;
         }
@@ -447,8 +458,8 @@ var RightClick = RightClick || {};
         $(document.elementFromPoint(event.clientX, event.clientY)).contextmenu();
     }
 
-    exports.container = $('<div id="rightClickContainer"></div>').appendTo('body');
-    exports.detector = $('<div id="rightClickDetector"></div>').appendTo('body');
+    exports.container = $('<div id="' + exports.selectors.containerId + '"></div>').appendTo('body');
+    exports.detector = $('<div id="' + exports.selectors.detectorId + '"></div>').appendTo('body');
 
     exports.detector.on('click resize', exports.closeAllMenus);
     exports.detector.on('contextmenu', exports.propagateRightClick);
