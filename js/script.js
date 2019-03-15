@@ -5,22 +5,6 @@ var RightClick = RightClick || {};
 
     exports.appName = 'files_rightclick';
 
-    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications'), function (data) {
-      exports.availableApplications = data;
-    });
-
-    exports.isAppAvailable = function (appNames) {
-        if (!(appNames instanceof Array))
-            appNames = [appNames];
-
-        for (var i = 0; i < appNames.length; i++) {
-            if (exports.availableApplications.includes(appNames[i]))
-                return true;
-        }
-
-        return false;
-    };
-
     // Object where all options are listed for one (sub)menu
     exports.Options = function (options) {
         this.options = [];
@@ -67,7 +51,7 @@ var RightClick = RightClick || {};
             return this.add(options, this.getNbrOfOptions());
         };
 
-        // Generate all options html
+        // Generate all html options
         this.generate = function () {
             var ul = $('<ul>');
 
