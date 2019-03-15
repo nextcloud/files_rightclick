@@ -214,20 +214,30 @@ var RightClick = RightClick || {};
             event.stopPropagation();
             event.preventDefault();
 
+            if (exports.propagatedEvent) {
+                event.clientX = exports.propagatedEvent.clientX;
+                event.clientY = exports.propagatedEvent.clientY;
+
+                delete exports.propagatedEvent;
+            }
+
             var delimiter = $(this);
             var context = menu.context;
             var options = menu.options;
             var params = menu.params;
 
             if (menu.isSubMenu) {
-                if (!exports.closeAllSubMenus())
-                    return false;
+                if (!exports.closeAllSubMenus()) {
+                    return !exports.clean();
+                }
             }
-            else if (!exports.closeAllMenus())
-                return false;
+            else if (!exports.closeAllMenus()) {
+                return !exports.clean();
+            }
 
-            if (menu.isOpened())
-                return false;
+            if (menu.isOpened()) {
+                return !exports.clean();
+            }
 
             exports.prepare();
 
@@ -242,8 +252,9 @@ var RightClick = RightClick || {};
             if (typeof options === "function")
                 options = options(event, context, delimiter);
 
-            if (options.getNbrOfOptions() === 0)
-                return;
+            if (options.getNbrOfOptions() === 0) {
+                return !exports.clean();
+            }
 
             menu.element = $('<div>', menu.isSubMenu ? {
                 'class': 'rightClick rightSubMenu bubble open'
@@ -377,13 +388,10 @@ var RightClick = RightClick || {};
         return true;
     };
 
-    exports.isAMenuOpened = function (key) {
-        for (key; key < exports.menus.length; key++) {
+    exports.isAMenuOpened = function () {
+        for (let key = 0; key < exports.menus.length; key++) {
             if (exports.menus[key].isOpened()) {
                 return true;
-            }
-            else {
-                return exports.isAMenuOpened(++key);
             }
         }
 
@@ -393,9 +401,10 @@ var RightClick = RightClick || {};
     exports.prepare = function () {
         if (!exports.isAMenuOpened()) {
             $(window).on('resize', exports.closeAllMenus);
-            $('body').on('click contextmenu', exports.closeAllMenus);
             $('body').addClass('rightClick-fixed');
         }
+
+        $('#rightClickDetector').css('display', 'block');
     }
 
     exports.onKeyUp = function (event) {
@@ -409,10 +418,10 @@ var RightClick = RightClick || {};
         }
 
         if (isEscape) {
-            var length = exports.menus.length;
-
-            if (length) {
+            if (exports.isAMenuOpened()) {
                 exports.closeAllMenus();
+
+                event.stopPropagation();
             }
         }
     };
@@ -420,12 +429,29 @@ var RightClick = RightClick || {};
     exports.clean = function () {
         if (!exports.isAMenuOpened()) {
             $(window).off('resize', exports.closeAllMenus);
-            $('body').off('click contextmenu', exports.closeAllMenus);
             $('body').removeClass('rightClick-fixed');
+            $('#rightClickDetector').css('display', 'none');
 
-            document.onkeyup = exports.onKeyUp;
+            return true;
         }
+
+        return false;
     };
 
+    exports.propagateRightClick = function (event) {
+        exports.closeAllMenus();
+        event.preventDefault();
+        event.stopPropagation();
+
+        exports.propagatedEvent = event;
+        $(document.elementFromPoint(event.clientX, event.clientY)).contextmenu();
+    }
+
     exports.container = $('<div id="rightClickContainer"></div>').appendTo('body');
+    exports.detector = $('<div id="rightClickDetector"></div>').appendTo('body');
+
+    exports.detector.on('click resize', exports.closeAllMenus);
+    exports.detector.on('contextmenu', exports.propagateRightClick);
+
+    document.onkeyup = exports.onKeyUp;
 })(window, jQuery, RightClick);
