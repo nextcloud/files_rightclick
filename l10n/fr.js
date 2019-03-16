@@ -13,6 +13,8 @@ OC.L10N.register(
     "Watch" : "Suivre",
     "Open file" : "Ouvrir le fichier",
     "Select" : "Sélectionner",
-    "Copied !" : "Copié !"
+    "Copied !" : "Copié !",
+    "Right click" : "Clic droit",
+    "Right click menu for Nextcloud" : "Menu clic droit pour Nextcloud"
 },
 "nplurals=2; plural=(n > 1);");
