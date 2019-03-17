@@ -11,6 +11,9 @@
     "Watch" : "Titta",
     "Open file" : "Öppna fil",
     "Select" : "Välj",
-    "Copied !" : "Kopierat!"
+    "Copied !" : "Kopierat!",
+    "Right click" : "Högerklick",
+    "Right click menu for Nextcloud" : "Högerklick-meny för Nextcloud",
+    "This app allows users and developers to have a right click menu. Simply use the RightClick object to quickly create context menus. The Files app already shows the actions menu when right clicking on files and folders." : "Denna app tillåter användare och utvecklare att ha en högerklick-meny. Använd högerklick-objektet för att snabbt skapa kontextmenyer. Appen Filer visar redan åtgärdsmenyn när du högerklickar på filer och mappar."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
