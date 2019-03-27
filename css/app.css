@@ -2,7 +2,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100001;
 }
 
 #rightClickDetector {
@@ -13,6 +12,10 @@
     right: 0;
     bottom: 0;
     z-index: 100000;
+}
+
+.rightClickMenu {
+    z-index: 100001;
 }
 
 .rightClickMenu.bubble:after {

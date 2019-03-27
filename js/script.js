@@ -219,15 +219,13 @@ var RightClick = RightClick || {};
             return this.element !== undefined;
         }
 
-        var onClick = function (event) {
+        var onClick = function (event, originalEvent) {
             event.stopPropagation();
             event.preventDefault();
 
-            if (exports.propagatedEvent) {
-                event.clientX = exports.propagatedEvent.clientX;
-                event.clientY = exports.propagatedEvent.clientY;
-
-                delete exports.propagatedEvent;
+            if (originalEvent) {
+                event.clientX = originalEvent.clientX;
+                event.clientY = originalEvent.clientY;
             }
 
             var delimiter = $(this);
@@ -308,7 +306,6 @@ var RightClick = RightClick || {};
                 'top': top,
                 'left': left,
                 'right': 'auto',
-                'z-index': 10000
             });
 
             var optionsDisabled = options.isDisabled();
@@ -316,6 +313,7 @@ var RightClick = RightClick || {};
             if (optionsDisabled)
                 menu.element.css('background-color', '#AAA');
 
+            menu.element.on('contextmenu', () => false);
             menu.element.on('mouseleave', function (event) {
                 if (menu.isOpenedOnHover)
                     menu.close();
@@ -454,8 +452,7 @@ var RightClick = RightClick || {};
         event.preventDefault();
         event.stopPropagation();
 
-        exports.propagatedEvent = event;
-        $(document.elementFromPoint(event.clientX, event.clientY)).contextmenu();
+        $(document.elementFromPoint(event.clientX, event.clientY)).trigger('contextmenu', event);
     }
 
     exports.container = $('<div id="' + exports.selectors.containerId + '"></div>').appendTo('body');
