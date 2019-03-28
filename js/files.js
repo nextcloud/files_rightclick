@@ -2,7 +2,7 @@
     'use strict';
 
     if (!RightClick) {
-        console.log('The RightClick app is recommanded to have context menus');
+        console.error('The RightClick app is recommanded to have context menus');
         return false;
     }
 
@@ -10,11 +10,11 @@
 
     new RightClick.Menu($('tbody[id=fileList]'), function (event, context, delimiter) {
         var options = new RightClick.Options();
-        var openSubOptions = new RightClick.Options();
         var currentFile = $(event.target).closest('tr');
         var selectedActions = '.selectedActions .menu-center li';
         currentFile.find('.action-menu').click();
-        $('.actions-selected').click().click();
+        $('.filesSelectMenu').css('visibility', 'hidden');
+        $('.actions-selected').click();
 
         var menu = currentFile.find('.fileActionsMenu');
         var menuStyle = $('style.rightClickStyle');
@@ -81,57 +81,11 @@
 
             var share = currentFile.find('.filename .fileactions .action-share');
 
-            if (share.length !== 0) {
+            if (share.length === 0) {
                 addNewOption('Share', 'shared', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
                     share.click();
                 });
             }
-
-            if (currentFile.attr('data-type') === 'dir') {
-                text = t(appName, 'Open folder');
-                icon = 'filetype-folder-drag-accept';
-
-                addNewOpenSubOption('NewTab', 'category-app-bundles', t(appName, 'Open in new tab'), function () {
-                    window.open('?dir=' + currentFile.attr('data-path') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-                });
-            }
-            else if (mimeType === 'text/plain') {
-                text = t(appName, 'Edit file');
-                icon = 'edit';
-            }
-            else if (mimeType === 'application/pdf') {
-                text = t(appName, 'Read PDF');
-            }
-            else if (mimeType.indexOf('image') >= 0 && RightClick.isAppAvailable('gallery')) {
-                text = t(appName, 'See picture');
-
-                addNewOpenSubOption('Gallery', 'category-multimedia', t(appName, 'Open in Gallery'), function () {
-                    window.open(OC.generateUrl('/apps/gallery') + currentFile.attr('data-path').replace('/', '/#') + (currentFile.attr('data-path') === '/' ? '' : '/') + currentFile.attr('data-file'), "_blank");
-                });
-            }
-            else if (mimeType.indexOf('audio') >= 0 && (RightClick.isAppAvailable(['audioplayer', 'music']))) {
-                var isReading = function () {
-                    return (currentFile.find('.ioc').length === 1) && (currentFile.find('.ioc').css('display') !== 'none');
-                };
-
-                text = t(appName, 'Play/Pause');
-                icon = 'play';
-
-                onClick = function () {
-                    if (!isReading()) {
-                        currentFile.find('.filename .nametext').click();
-                    }
-                };
-            }
-            else if (mimeType.indexOf('video') >= 0 && RightClick.isAppAvailable('audioplayer')) {
-                text = t(appName, 'Watch');
-                icon = 'play';
-            }
-            else if (currentFile.attr('data-type') === 'file') {
-                text = t(appName, 'Open file');
-            }
-
-            addNewOption('Open', icon, text, onClick, true, openSubOptions);
 
             if (!$('#selectedActionsList').hasClass('hidden')) {
                 addNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
@@ -140,7 +94,7 @@
             }
         }
 
-        for (var key in menu.find('li')) {
+        for (var key in menu.find('li:not(.hidden)')) {
             if (!isNaN(key)) {
                 var li = $(menu.find('li')[key]);
                 var spans = $(li.find('span'));
@@ -157,8 +111,10 @@
         setTimeout(function () {
             currentFile.find('.action-menu').click();
             $('.fileActionsMenu').css('visibility', 'hidden');
-        }, 250);
+        }, 100);
 
         return options;
-    }, $('#app-content-files #fileList'));
+    }, $('#app-content-files #fileList'), function () {
+        $('.filesSelectMenu').css('visibility', 'visible');
+    });
 })(window, jQuery, RightClick);

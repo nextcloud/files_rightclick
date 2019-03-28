@@ -4,21 +4,14 @@ var RightClick = RightClick || {};
     'use strict';
 
     exports.appName = 'files_rightclick';
-
-    $.get(OC.generateUrl('/apps/files_rightclick/ajax/applications'), function (data) {
-      exports.availableApplications = data;
-    });
-
-    exports.isAppAvailable = function (appNames) {
-        if (!(appNames instanceof Array))
-            appNames = [appNames];
-
-        for (var i = 0; i < appNames.length; i++) {
-            if (exports.availableApplications.includes(appNames[i]))
-                return true;
-        }
-
-        return false;
+    exports.selectors = {
+        containerId: 'rightClickMenus',
+        detectorId: 'rightClickDetector',
+        menuId: 'rightClickMenu',
+        menuClass: 'rightClickMenu',
+        subMenuClass: 'rightClickSubMenu',
+        openedClass: 'rightClickOpened',
+        arrowClass: 'rightClickArrow',
     };
 
     // Object where all options are listed for one (sub)menu
@@ -67,7 +60,7 @@ var RightClick = RightClick || {};
             return this.add(options, this.getNbrOfOptions());
         };
 
-        // Generate all options html
+        // Generate all html options
         this.generate = function () {
             var ul = $('<ul>');
 
@@ -183,7 +176,7 @@ var RightClick = RightClick || {};
 
             if (this.subOptions instanceof exports.Options && this.subOptions.getNbrOfOptions() > 0) {
                 var sub = $('<a>').append($('<span>').text('▶')
-                    .css('padding-right', '10px')).addClass('rightClickArrow')
+                    .css('padding-right', '10px')).addClass(exports.selectors.arrowClass)
                     .attr('style', 'width: auto; padding-right: 0px !important');
 
                 new exports.Menu(sub, this.subOptions, li).setAsSubMenu().setAlsoOnHover().setAlsoOnLeftClick();
@@ -226,9 +219,14 @@ var RightClick = RightClick || {};
             return this.element !== undefined;
         }
 
-        var onClick = function (event) {
+        var onClick = function (event, originalEvent) {
             event.stopPropagation();
             event.preventDefault();
+
+            if (originalEvent) {
+                event.clientX = originalEvent.clientX;
+                event.clientY = originalEvent.clientY;
+            }
 
             var delimiter = $(this);
             var context = menu.context;
@@ -236,14 +234,17 @@ var RightClick = RightClick || {};
             var params = menu.params;
 
             if (menu.isSubMenu) {
-                if (!exports.closeAllSubMenus())
-                    return false;
+                if (!exports.closeAllSubMenus()) {
+                    return !exports.clean();
+                }
             }
-            else if (!exports.closeAllMenus())
-                return false;
+            else if (!exports.closeAllMenus()) {
+                return !exports.clean();
+            }
 
-            if (menu.isOpened())
-                return false;
+            if (menu.isOpened()) {
+                return !exports.clean();
+            }
 
             exports.prepare();
 
@@ -258,14 +259,17 @@ var RightClick = RightClick || {};
             if (typeof options === "function")
                 options = options(event, context, delimiter);
 
-            if (options.getNbrOfOptions() === 0)
-                return;
+            if (options.getNbrOfOptions() === 0) {
+                return !exports.clean();
+            }
+
+            var className = exports.selectors.menuClass + ' bubble open';
 
             menu.element = $('<div>', menu.isSubMenu ? {
-                'class': 'rightClick rightSubMenu bubble open'
+                'class': exports.selectord.subMenuClass +  ' ' + className
             } : {
-                'id': 'rightClickMenu',
-                'class': 'rightClick bubble open'
+                'id': exports.selectors.menuId,
+                'class': className
             }).append(options.generate());
 
             menu.element.appendTo(exports.container);
@@ -302,7 +306,6 @@ var RightClick = RightClick || {};
                 'top': top,
                 'left': left,
                 'right': 'auto',
-                'z-index': 10000
             });
 
             var optionsDisabled = options.isDisabled();
@@ -310,6 +313,7 @@ var RightClick = RightClick || {};
             if (optionsDisabled)
                 menu.element.css('background-color', '#AAA');
 
+            menu.element.on('contextmenu', () => false);
             menu.element.on('mouseleave', function (event) {
                 if (menu.isOpenedOnHover)
                     menu.close();
@@ -393,13 +397,10 @@ var RightClick = RightClick || {};
         return true;
     };
 
-    exports.isAMenuOpened = function (key) {
-        for (key; key < exports.menus.length; key++) {
+    exports.isAMenuOpened = function () {
+        for (var key = 0; key < exports.menus.length; key++) {
             if (exports.menus[key].isOpened()) {
                 return true;
-            }
-            else {
-                return exports.isAMenuOpened(++key);
             }
         }
 
@@ -409,9 +410,10 @@ var RightClick = RightClick || {};
     exports.prepare = function () {
         if (!exports.isAMenuOpened()) {
             $(window).on('resize', exports.closeAllMenus);
-            $('body').on('click contextmenu', exports.closeAllMenus);
-            $('body').addClass('rightClick-fixed');
+            $('body').addClass(exports.selectors.openedClass);
         }
+
+        $('#' + exports.selectors.detectorId).css('display', 'block');
     }
 
     exports.onKeyUp = function (event) {
@@ -425,10 +427,10 @@ var RightClick = RightClick || {};
         }
 
         if (isEscape) {
-            var length = exports.menus.length;
-
-            if (length) {
+            if (exports.isAMenuOpened()) {
                 exports.closeAllMenus();
+
+                event.stopPropagation();
             }
         }
     };
@@ -436,12 +438,28 @@ var RightClick = RightClick || {};
     exports.clean = function () {
         if (!exports.isAMenuOpened()) {
             $(window).off('resize', exports.closeAllMenus);
-            $('body').off('click contextmenu', exports.closeAllMenus);
-            $('body').removeClass('rightClick-fixed');
+            $('body').removeClass(exports.selectors.openedClass);
+            $('#' + exports.selectors.detectorId).css('display', 'none');
 
-            document.onkeyup = exports.onKeyUp;
+            return true;
         }
+
+        return false;
     };
 
-    exports.container = $('<div id="rightClickContainer"></div>').appendTo('body');
+    exports.propagateRightClick = function (event) {
+        exports.closeAllMenus();
+        event.preventDefault();
+        event.stopPropagation();
+
+        $(document.elementFromPoint(event.clientX, event.clientY)).trigger('contextmenu', event);
+    }
+
+    exports.container = $('<div id="' + exports.selectors.containerId + '"></div>').appendTo('body');
+    exports.detector = $('<div id="' + exports.selectors.detectorId + '"></div>').appendTo('body');
+
+    exports.detector.on('click resize', exports.closeAllMenus);
+    exports.detector.on('contextmenu', exports.propagateRightClick);
+
+    document.onkeyup = exports.onKeyUp;
 })(window, jQuery, RightClick);

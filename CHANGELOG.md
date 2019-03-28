@@ -1,4 +1,9 @@
 # Changelogs
+## 0.13.0
+- Remove regular click option: "Open folder" for example
+- Improve outside clicks detection
+- Code cleaning
+
 ## 0.12.0
 - The app repository was transfered to Nextcloud in order to ship the Right click app by default.
 - Update README.md and info.xml

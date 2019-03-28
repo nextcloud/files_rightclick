@@ -2,14 +2,28 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
 }
 
-.rightClick.bubble:after {
+#rightClickDetector {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100000;
+}
+
+.rightClickMenu {
+    position: fixed;
+    z-index: 100001;
+}
+
+.rightClickMenu.bubble:after {
     display: none;
 }
 
-.rightClick-fixed {
+.rightClickOpened {
     height: 100% !important;
     overflow: hidden !important;
 }
