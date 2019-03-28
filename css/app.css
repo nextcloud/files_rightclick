@@ -15,6 +15,7 @@
 }
 
 .rightClickMenu {
+    position: fixed;
     z-index: 100001;
 }
 
