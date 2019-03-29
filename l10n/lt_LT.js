@@ -3,13 +3,6 @@ OC.L10N.register(
     {
     "Unselect" : "Nuimti žymėjimą",
     "Share " : "Bendrinti",
-    "Open folder" : "Atverti aplanką",
-    "Open in new tab" : "Atverti naujoje kortelėje",
-    "Edit file" : "Taisyti failą",
-    "Read PDF" : "Skaityti PDF",
-    "See picture" : "Rodyti paveikslą",
-    "Open in Gallery" : "Atverti galerijoje",
-    "Open file" : "Atverti failą",
     "Select" : "Žymėti",
     "Copied !" : "Nukopijuota!"
 },

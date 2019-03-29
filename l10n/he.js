@@ -3,15 +3,6 @@ OC.L10N.register(
     {
     "Unselect" : "ביטול בחירה",
     "Share " : "שיתוף",
-    "Open folder" : "פתיחת תיקייה",
-    "Open in new tab" : "פתיחה בלשונית חדשה",
-    "Edit file" : "עריכת קובץ",
-    "Read PDF" : "קריאת PDF",
-    "See picture" : "הצגת תמונה",
-    "Open in Gallery" : "פתיחה בגלריה",
-    "Play/Pause" : "נגינה/השהיה",
-    "Watch" : "צפייה",
-    "Open file" : "פתיחת קובץ",
     "Select" : "בחירה",
     "Copied !" : "הועתק!"
 },

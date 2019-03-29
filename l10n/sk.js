@@ -3,15 +3,6 @@ OC.L10N.register(
     {
     "Unselect" : "Zrušiť výber",
     "Share " : "Sprístupniť",
-    "Open folder" : "Otvoriť priečinok",
-    "Open in new tab" : "Otvoriť na novej karte",
-    "Edit file" : "Upraviť súbor",
-    "Read PDF" : "Čítať PDF",
-    "See picture" : "Pozrieť obrázok",
-    "Open in Gallery" : "Otvoriť v galérii",
-    "Play/Pause" : "Prehrať / Pozastaviť",
-    "Watch" : "Pozrieť",
-    "Open file" : "Otvoriť súbor",
     "Select" : "Vybrať",
     "Copied !" : "Skopírované!"
 },

@@ -1,10 +1,5 @@
 { "translations": {
     "Share " : "Megosztás",
-    "Open in new tab" : "Megnyitás új fülön",
-    "Edit file" : "Fájl szerkesztése",
-    "See picture" : "Kép megnézése",
-    "Watch" : "Megnéz",
-    "Open file" : "Fájl megnyitása",
     "Select" : "Válassz",
     "Right click" : "Jobb gomb"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
