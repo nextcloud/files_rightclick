@@ -1,0 +1,9 @@
+{ "translations": {
+    "Unselect" : "Malelekti",
+    "Share " : "Kunhavigi",
+    "Select" : "Elekti",
+    "Copied !" : "Kopiita!",
+    "Right click" : "Dekstra alklako",
+    "Right click menu for Nextcloud" : "Dekstralklaka menuo por Nextcloud"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
