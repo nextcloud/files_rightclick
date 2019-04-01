@@ -1,7 +1,8 @@
-# Right Click (Nextcloud app)
+# Right click for Nextcloud
   This app allows users and developers to have a right click menu.
   Simply use the RightClick object to quickly create context menus.
   The Files app already shows the actions menu when right clicking on files and folders.
+  The regular right click menu of the browser can be accessed either on areas which don’t have a right-click handler (like the header or left navigation) or anywhere by simply holding <kbd>⬆ Shift</kbd> before right click.
 
 # Some screenshots
 ## Folder context menu
