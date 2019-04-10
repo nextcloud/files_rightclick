@@ -1,0 +1,9 @@
+{ "translations": {
+    "Unselect" : "Afvelja",
+    "Share " : "Deila ",
+    "Select" : "Velja",
+    "Copied !" : "Afritað!",
+    "Right click" : "Hægrismella",
+    "Right click menu for Nextcloud" : "Hægrismells-valmynd fyrir Nextcloud"
+},"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
+}
