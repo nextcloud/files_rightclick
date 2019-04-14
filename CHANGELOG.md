@@ -1,4 +1,8 @@
 # Changelogs
+## 0.14.2
+- Keys are handled when right clicking. By default, the right click menu does not show up if a mod key is pressed (ctrl, shift, alt).
+- Allow developer to use the regular right click (https://github.com/nextcloud/files_rightclick/issues/59 thanks to @juliushaertl)
+
 ## 0.13.0
 - Remove regular click option: "Open folder" for example
 - Improve outside clicks detection
