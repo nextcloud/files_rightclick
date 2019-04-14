@@ -241,7 +241,7 @@ var RightClick = RightClick || {};
                 var targetedEvent = originalEvent || event;
 
                 if (targetedEvent[keyName + 'Key'] && !menu.handledKeys[keyName]) {
-                    return false;
+                    return true;
                 }
             }
 
