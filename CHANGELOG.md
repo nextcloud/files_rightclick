@@ -1,4 +1,11 @@
 # Changelogs
+## 0.14.1
+- Fix printed options
+
+## 0.14.0
+- Improve README
+- App embended by default for NC 17
+
 ## 0.13.0
 - Remove regular click option: "Open folder" for example
 - Improve outside clicks detection
