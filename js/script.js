@@ -13,6 +13,9 @@ var RightClick = RightClick || {};
         openedClass: 'rightClickOpened',
         arrowClass: 'rightClickArrow',
     };
+    exports.handableKeys = [
+        'ctrl', 'shift', 'alt'
+    ];
 
     // Object where all options are listed for one (sub)menu
     exports.Options = function (options) {
@@ -195,12 +198,13 @@ var RightClick = RightClick || {};
     };
 
     exports.menus = [];
-    exports.Menu = function (delimiter, options, context, onClose) {
+    exports.Menu = function (delimiter, options, context, onClose, handledKeys) {
         this.delimiter = $(delimiter);
         this.context = context;
         this.currentContext = undefined;
         this.options = options || new exports.Options();
         this.onClose = onClose;
+
         this.isSubMenu = false;
 
         if (delimiter === undefined)
@@ -219,7 +223,28 @@ var RightClick = RightClick || {};
             return this.element !== undefined;
         }
 
+        this.handleKeys = function (handledKeys) {
+            this.handledKeys = {};
+            handledKeys = handledKeys || {};
+
+            for (var key in exports.handableKeys) {
+                var keyName = exports.handableKeys[key];
+
+                this.handledKeys[keyName] = handledKeys[keyName] || false;
+            }
+        };
+        this.handleKeys(handledKeys);
+
         var onClick = function (event, originalEvent) {
+            for (var key in exports.handableKeys) {
+                var keyName = exports.handableKeys[key];
+                var targetedEvent = originalEvent || event;
+
+                if (targetedEvent[keyName + 'Key'] && !menu.handledKeys[keyName]) {
+                    return false;
+                }
+            }
+
             event.stopPropagation();
             event.preventDefault();
 
