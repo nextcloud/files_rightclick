@@ -5,9 +5,11 @@ $includes = [
     'Files_Sharing' => 'files',
 ];
 
-\OCP\Util::addScript('files_rightclick', 'script');
-
 $eventDispatcher = \OC::$server->getEventDispatcher();
+
+$eventDispatcher->addListener(\OCP\AppFramework\Http\TemplateResponse::EVENT_LOAD_ADDITIONAL_SCRIPTS_LOGGEDIN, function() {
+	\OCP\Util::addScript('files_rightclick', 'script');
+});
 
 foreach ($includes as $app => $include) {
     $eventDispatcher->addListener(
