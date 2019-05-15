@@ -1,5 +1,10 @@
 { "translations": {
     "Unselect" : "Снять выбор",
-    "Share " : "Предоставить доступ"
+    "Share " : "Предоставить доступ",
+    "Select" : "Выбрать",
+    "Copied !" : "Скопировано !",
+    "Right click" : "Правая кнопка мыши",
+    "Right click menu for Nextcloud" : "Меню правой кнопки мыши для Nextcloud",
+    "This app allows users and developers to have a right click menu. Simply use the RightClick object to quickly create context menus. The Files app already shows the actions menu when right clicking on files and folders." : "Это приложение позволяет пользователям и разработчикам использовать меню правой кнопки мыши. Просто используйте объект RightClick, чтобы быстро создавать контекстные меню. Приложение Files уже показывает меню действий при нажатии правой кнопки мыши по файлам и каталогам."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

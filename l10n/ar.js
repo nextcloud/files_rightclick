@@ -2,7 +2,9 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "إلغاء التحديد",
+    "Share " : "شاركه",
     "Select" : "تحديد",
+    "Copied !" : "تم نسخه!",
     "Right click" : "الزر الايمن",
     "Right click menu for Nextcloud" : "قائمة الزر الايمن لنكست كلاود"
 },
