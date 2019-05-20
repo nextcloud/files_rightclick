@@ -338,7 +338,9 @@ var RightClick = RightClick || {};
             if (optionsDisabled)
                 menu.element.css('background-color', '#AAA');
 
-            menu.element.on('contextmenu', () => false);
+            menu.element.on('contextmenu', function () {
+                return false;
+            });
             menu.element.on('mouseleave', function (event) {
                 if (menu.isOpenedOnHover)
                     menu.close();
