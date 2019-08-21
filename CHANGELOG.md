@@ -1,4 +1,7 @@
 # Changelogs
+## 0.15.1
+- The right click menu was not loaded.
+
 ## 0.15.0
 - Add multiple translations thanks to Transifex
 - RightClick does no more load in log in screen.
