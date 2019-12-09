@@ -15,8 +15,8 @@ foreach ($includes as $app => $include) {
     $eventDispatcher->addListener(
         'OCA\\'.$app.'::loadAdditionalScripts',
         function () use ($include) {
-			\OCP\Util::addScript('files_rightclick', 'script');
-			\OCP\Util::addScript('files_rightclick', $include);
+            \OCP\Util::addScript('files_rightclick', 'script');
+            \OCP\Util::addScript('files_rightclick', $include);
             \OCP\Util::addStyle('files_rightclick', 'app');
         }
     );
