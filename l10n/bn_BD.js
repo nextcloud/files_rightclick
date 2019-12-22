@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "سشیبشسیب",
-    "Select" : "ټاکل"
+    "Select" : "সিলেক্ট"
 },
 "nplurals=2; plural=(n != 1);");
