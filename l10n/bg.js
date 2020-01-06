@@ -4,6 +4,7 @@ OC.L10N.register(
     "Unselect" : "Размаркирай",
     "Share " : "Сподели",
     "Select" : "Избери",
-    "Copied !" : "Копирано!"
+    "Copied !" : "Копирано!",
+    "Right click" : "Десен бутон"
 },
 "nplurals=2; plural=(n != 1);");
