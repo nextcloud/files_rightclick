@@ -4,7 +4,7 @@
     <name>Right click</name>
     <summary>Right click menu for Nextcloud</summary>
     <description><![CDATA[This app allows users and developers to have a right click menu. Simply use the RightClick object to quickly create context menus. The Files app already shows the actions menu when right clicking on files and folders.]]></description>
-    <version>0.15.2</version>
+    <version>0.16.0</version>
     <licence>agpl</licence>
     <author mail="samy@nastuzzi.fr" homepage="https://samy.nastuzzi.fr">NASTUZZI Samy</author>
     <namespace>FilesRightClick</namespace>
@@ -16,7 +16,7 @@
     <repository>https://github.com/nextcloud/files_rightclick</repository>
     <screenshot>https://raw.githubusercontent.com/nextcloud/files_rightclick/master/screenshots/picture.png</screenshot>
     <dependencies>
-        <nextcloud min-version="14" max-version="18" />
+        <nextcloud min-version="19" max-version="19" />
     </dependencies>
     <default_enable />
 </info>
