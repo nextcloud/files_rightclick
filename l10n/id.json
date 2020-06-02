@@ -1,4 +1,8 @@
 { "translations": {
-    "Select" : "Pilih"
+    "Unselect" : "Batal pilih",
+    "Share " : "Bagikan",
+    "Select" : "Pilih",
+    "Copied !" : "Tersalin !",
+    "Right click" : "Klik kanan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
