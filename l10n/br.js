@@ -5,7 +5,7 @@ OC.L10N.register(
     "Share " : "Rannan",
     "Select" : "Dibab",
     "Copied !" : "Eilet !",
-    "Right click" : "klik dehou",
+    "Right click" : "Klik dehou",
     "Right click menu for Nextcloud" : "Grit ur c'hlik dehou war ar roll-mezioù evit Nexcloud",
     "This app allows users and developers to have a right click menu. Simply use the RightClick object to quickly create context menus. The Files app already shows the actions menu when right clicking on files and folders." : "Ar meziant man a aotre implijourien a diorennourien ober ur c'hlik dehou war ar roll-mezioù. Implijit an dafar RightClick evit krouiñ buhan ur roll-mezioù arroud. Ar meziant Files a ziskouel dija ar roll-mezioù ober pa vez graet ur c'hlik dehou war ur restr pe un teuliad."
 },
