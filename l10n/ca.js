@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "No seleccionis",
+    "Unselect" : "Anul·la la selecció",
     "Share " : "Comparteix",
     "Select" : "Selecciona",
     "Copied !" : "S'ha copiat!",
