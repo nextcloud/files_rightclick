@@ -81,7 +81,7 @@
 
             var share = currentFile.find('.filename .fileactions .action-share');
 
-            if (share.length === 0) {
+            if (share.length !== 0) {
                 addNewOption('Share', 'shared', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
                     share.click();
                 });
