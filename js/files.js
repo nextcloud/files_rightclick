@@ -82,7 +82,7 @@
             var share = currentFile.find('.filename .fileactions .action-share');
 
             if (share.length !== 0) {
-                addNewOption('Share', 'shared', t(appName, 'Share ' + (currentFile.attr('data-type') === 'dir' ? 'folder' : 'file')), function () {
+                addNewOption('Share', 'shared', (currentFile.attr('data-type') === 'dir' ? t(appName, 'Share folder') : t(appName, 'Share file')), function () {
                     share.click();
                 });
             }
