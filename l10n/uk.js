@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Зняти виділення",
-    "Share " : "Поширити",
     "Select" : "Вибрати",
     "Copied !" : "Скопійовано!",
     "Right click" : "Права кнопка",

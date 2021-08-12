@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Αναίρεση επιλογής",
-    "Share " : "Διαμοιρασμός",
     "Select" : "Επιλογή",
     "Copied !" : "Αντιγράφηκε !",
     "Right click" : "Δεξί κλικ",

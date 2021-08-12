@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Noņemt atlasi",
-    "Share " : "Koplietot",
     "Select" : "Atlasīt",
     "Copied !" : "Nokopēts!",
     "Right click" : "Labais peles klikšķis",

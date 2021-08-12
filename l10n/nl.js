@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Deselecteren",
-    "Share " : "Delen",
     "Select" : "Selecteer",
     "Copied !" : "Gekopieerd!",
     "Right click" : "Rechterklik",

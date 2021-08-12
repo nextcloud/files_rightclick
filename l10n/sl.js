@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Odstrani izbor",
-    "Share " : "Omogoči souporabo",
     "Select" : "Izberi",
     "Copied !" : "Kopirano!",
     "Right click" : "Desni klik",

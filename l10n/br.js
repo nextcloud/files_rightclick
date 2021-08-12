@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Dizibab",
-    "Share " : "Rannan",
     "Select" : "Dibab",
     "Copied !" : "Eilet !",
     "Right click" : "Klik dehou",

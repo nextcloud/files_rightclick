@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Poista valinta",
-    "Share " : "Jaa",
     "Select" : "Valitse",
     "Copied !" : "Kopioitu!",
     "Right click" : "Oikea Klikkaus",
