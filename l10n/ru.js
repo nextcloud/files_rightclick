@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Снять выбор",
-    "Share " : "Предоставить доступ",
     "Select" : "Выбрать",
     "Copied !" : "Скопировано !",
     "Right click" : "Правая кнопка мыши",

@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "لغو انتخاب",
-    "Share " : "اشتراک گذاری",
     "Select" : "انتخاب",
     "Copied !" : "کپی شد!",
     "Right click" : "کلیک راست",

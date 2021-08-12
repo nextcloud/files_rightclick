@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "選択解除",
-    "Share " : "共有",
     "Select" : "選択",
     "Copied !" : "コピーしました",
     "Right click" : "右クリック",
