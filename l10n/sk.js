@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Zrušiť výber",
-    "Share " : "Sprístupniť",
     "Select" : "Vybrať",
     "Copied !" : "Skopírované!",
     "Right click" : "Pravý klik",

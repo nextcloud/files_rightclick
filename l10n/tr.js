@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Bırak",
-    "Share " : "Paylaş",
     "Select" : "Seç",
     "Copied !" : "Kopyalandı !",
     "Right click" : "Sağ tık",

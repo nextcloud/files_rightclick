@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Velg bort",
-    "Share " : "Del",
     "Select" : "Velg",
     "Copied !" : "Kopiert!",
     "Right click" : "Høyreklikk",

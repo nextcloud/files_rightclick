@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "إلغاء التحديد",
-    "Share " : "شاركه",
     "Select" : "تحديد",
     "Copied !" : "تم نسخه!",
     "Right click" : "الزر الايمن",
