@@ -2,6 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "取消选择",
+    "Share folder" : "共享文件夹",
+    "Share file" : "共享文件",
     "Select" : "选择",
     "Copied !" : "已复制!",
     "Right click" : "右键单击",
