@@ -2,6 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Kiválasztás megszüntetése",
+    "Share folder" : "Mappa megosztása",
+    "Share file" : "Fájl megosztása",
     "Select" : "Kiválasztás",
     "Copied !" : "Másolva.",
     "Right click" : "Jobb gomb",
