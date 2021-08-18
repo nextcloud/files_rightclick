@@ -1,5 +1,7 @@
 { "translations": {
     "Unselect" : "Désélectionner",
+    "Share folder" : "Partager le dossier",
+    "Share file" : "Partager le fichier",
     "Select" : "Sélectionner",
     "Copied !" : "Copié !",
     "Right click" : "Clic droit",

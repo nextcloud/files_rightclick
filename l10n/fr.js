@@ -2,6 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Désélectionner",
+    "Share folder" : "Partager le dossier",
+    "Share file" : "Partager le fichier",
     "Select" : "Sélectionner",
     "Copied !" : "Copié !",
     "Right click" : "Clic droit",
