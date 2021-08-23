@@ -1,6 +1,13 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Select" : "Select"
+    "Unselect" : "Neselectat",
+    "Share folder" : "Distribuie dosar",
+    "Share file" : "Distribuie fișier",
+    "Select" : "Selectează",
+    "Copied !" : "Copiat",
+    "Right click" : "Click dreapta",
+    "Right click menu for Nextcloud" : "Meniul click dreapta pentru Nextcloud",
+    "This app allows users and developers to have a right click menu. Simply use the RightClick object to quickly create context menus. The Files app already shows the actions menu when right clicking on files and folders." : "Această aplicație permite utilizatorilor și dezvoltatorilor să aibă un meniu de click dreapta. Pur și simplu folosește obiecte ClickDreapta pentru a creea meniuri contextuale. Applicația Files deja arată un meniu cu acțiuni posibile când se apasă click dreapta."
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");
