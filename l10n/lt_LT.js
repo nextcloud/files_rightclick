@@ -2,7 +2,6 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Nuimti žymėjimą",
-    "Share " : "Bendrinti",
     "Select" : "Žymėti",
     "Copied !" : "Nukopijuota!"
 },

@@ -2,7 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Desautatu",
-    "Share " : "Partekatu",
+    "Share folder" : "Partekatu karpeta",
+    "Share file" : "Partekatu fitxategia",
     "Select" : "Hautatu",
     "Copied !" : "Kopiatuta !",
     "Right click" : "Klik eskuineko botoiarekin",

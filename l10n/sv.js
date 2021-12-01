@@ -2,7 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Avmarkera",
-    "Share " : "Dela",
+    "Share folder" : "Dela mapp",
+    "Share file" : "Dela fil",
     "Select" : "Välj",
     "Copied !" : "Kopierat!",
     "Right click" : "Högerklick",
