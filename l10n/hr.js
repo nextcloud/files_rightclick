@@ -2,6 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Poništi odabir",
+    "Share folder" : "Dijeli mapu",
+    "Share file" : "Dijeli datoteku",
     "Select" : "Odaberi",
     "Copied !" : "Kopirano!",
     "Right click" : "Desni klik",
