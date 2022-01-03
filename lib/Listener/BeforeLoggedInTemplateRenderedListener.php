@@ -26,14 +26,21 @@ declare(strict_types=1);
 
 namespace OCA\FilesRightClick\Listener;
 
+use OC\TemplateLayout;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
 class BeforeLoggedInTemplateRenderedListener implements IEventListener {
 	public function handle(Event $event): void {
-		if (!$event instanceof BeforeTemplateRenderedEvent || !$event->isLoggedIn()) {
+		$renderAs = $event->getResponse()->getRenderAs();
+		if (!$event instanceof BeforeTemplateRenderedEvent
+			|| !$event->isLoggedIn()
+			|| $renderAs === TemplateResponse::RENDER_AS_BLANK
+			|| $renderAs === TemplateResponse::RENDER_AS_BASE
+		) {
 			return;
 		}
 
