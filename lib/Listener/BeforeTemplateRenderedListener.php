@@ -26,12 +26,20 @@ declare(strict_types=1);
 
 namespace OCA\FilesRightClick\Listener;
 
+use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
 class BeforeTemplateRenderedListener implements IEventListener {
 	public function handle(Event $event): void {
+		if ($event instanceof BeforeTemplateRenderedEvent &&
+			($event->getResponse()->getRenderAs() === TemplateResponse::RENDER_AS_BLANK
+				|| $event->getResponse()->getRenderAs() === TemplateResponse::RENDER_AS_BASE)
+		) {
+			return;
+		}
 		Util::addScript('files_rightclick', 'script');
 		Util::addScript('files_rightclick', 'files');
 		Util::addStyle('files_rightclick', 'app');
