@@ -1,5 +1,7 @@
 { "translations": {
     "Unselect" : "Avmarkera",
+    "Share folder" : "Dela mapp",
+    "Share file" : "Dela fil",
     "Select" : "Välj",
     "Copied !" : "Kopierat!",
     "Right click" : "Högerklick",
