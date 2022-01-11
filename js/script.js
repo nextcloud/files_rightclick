@@ -11,6 +11,10 @@ var RightClick = RightClick || {};
         menuClass: 'rightClickMenu',
         subMenuClass: 'rightClickSubMenu',
         openedClass: 'rightClickOpened',
+        openedShiftClass: 'openedHorizontalShift',
+        openedShiftClassFF: 'openedHorizontalShiftFF',
+        openedVTPaddingClass: 'view-togglePadding',
+        openedVTPaddingClassFF: 'view-togglePaddingFF',
         arrowClass: 'rightClickArrow',
     };
     exports.handableKeys = [
@@ -438,6 +442,18 @@ var RightClick = RightClick || {};
         if (!exports.isAMenuOpened()) {
             $(window).on('resize', exports.closeAllMenus);
             $('body').addClass(exports.selectors.openedClass);
+            //Add padding to elements to stop page jumping on right click
+            if(navigator.userAgent.match(/firefox|fxios/i)){ // More if statements can be added for other browsers with elseif
+              console.log('Match');
+             $('body').addClass(exports.selectors.openedShiftClassFF);
+             $('#header').addClass(exports.selectors.openedShiftClassFF);
+             $('#view-toggle').addClass(exports.selectors.openedVTPaddingClassFF);
+           } else {
+             console.log('No match');
+             $('#header').addClass(exports.selectors.openedShiftClass);
+             $('body').addClass(exports.selectors.openedShiftClass);
+             $('#view-toggle').addClass(exports.selectors.openedVTPaddingClass);
+           }
         }
 
         $('#' + exports.selectors.detectorId).css('display', 'block');
@@ -466,6 +482,14 @@ var RightClick = RightClick || {};
         if (!exports.isAMenuOpened()) {
             $(window).off('resize', exports.closeAllMenus);
             $('body').removeClass(exports.selectors.openedClass);
+            //Remove padding shift classes
+            $('#header').removeClass(exports.selectors.openedShiftClass);
+            $('body').removeClass(exports.selectors.openedShiftClass);
+            $('#view-toggle').removeClass(exports.selectors.openedVTPaddingClass);
+            //Specific for Firefox
+            $('#header').removeClass(exports.selectors.openedShiftClassFF);
+            $('body').removeClass(exports.selectors.openedShiftClassFF);
+            $('#view-toggle').removeClass(exports.selectors.openedVTPaddingClassFF);
             $('#' + exports.selectors.detectorId).css('display', 'none');
 
             return true;
