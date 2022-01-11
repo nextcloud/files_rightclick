@@ -26,4 +26,21 @@
 .rightClickOpened {
     height: 100% !important;
     overflow: hidden !important;
+    padding: 0 12px 0 0;
+}
+.rightClickOpenedFF {
+    padding: 0 8px 0 0;
+}
+.openedHorizontalShift {
+  padding: 0 12px 0 0;
+}
+.openedHorizontalShiftFF {
+  padding: 0 8px 0 0;
+}
+/* separate padding values for the view-toggle element as it already has padding */
+.view-togglePadding {
+  padding: 22px 46px 22px 22px!important; /* Maths genius */
+}
+.view-togglePaddingFF {
+  padding: 22px 38px 22px 22px!important;
 }
