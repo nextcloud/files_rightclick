@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Bỏ chọn",
-    "Select" : "Select"
+    "Select" : "ເລືອກ"
 },
 "nplurals=1; plural=0;");
