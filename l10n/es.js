@@ -10,4 +10,4 @@ OC.L10N.register(
     "Right click menu for Nextcloud" : "Menú de clic derecho para Nextcloud",
     "This app allows users and developers to have a right click menu. Simply use the RightClick object to quickly create context menus. The Files app already shows the actions menu when right clicking on files and folders." : "Esta app permite a usuarios y desarrolladores tener un menú de clic derecho. Simplemente, usa el objeto RightClick para crear rápidamente menús contextuales. La app de Archivos ya muestra el menú de acciones al hacer clic derecho en archivos y carpetas."
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
