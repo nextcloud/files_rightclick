@@ -87,7 +87,7 @@
                 });
             }
 
-            if (!$('#selectedActionsList').hasClass('hidden')) {
+            if (!$('.selectedActions').hasClass('hidden')) {
                 addNewOption('Check', 'category-enabled', t(appName, 'Select'), function () {
                     $(currentFile.find('input.selectCheckBox')).click();
                 });
