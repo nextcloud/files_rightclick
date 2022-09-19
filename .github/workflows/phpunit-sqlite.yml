@@ -56,7 +56,15 @@ jobs:
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite
           coverage: none
 
+      - name: Check composer file existence
+        id: check_composer
+        uses: andstor/file-existence-action@v1
+        with:
+          files: apps/${{ env.APP_NAME }}/composer.json
+
       - name: Set up PHPUnit
+        # Only run if phpunit config file exists
+        if: steps.check_composer.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
         run: composer i
 
