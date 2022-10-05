@@ -2,8 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Zrušit výběr",
-    "Share folder" : "Sdílet složku",
-    "Share file" : "Sdílet soubor",
+    "Share folder" : "Nasdílet složku",
+    "Share file" : "Nasdílet soubor",
     "Select" : "Označit",
     "Copied !" : "Zkopírováno",
     "Right click" : "Kliknutí pravým tlačítkem myši",
