@@ -2,6 +2,8 @@ OC.L10N.register(
     "files_rightclick",
     {
     "Unselect" : "Уклони избор",
+    "Share folder" : "Дели фолдер",
+    "Share file" : "Дели фајл",
     "Select" : "Одабери",
     "Copied !" : "Копирано!",
     "Right click" : "Десни клик",
