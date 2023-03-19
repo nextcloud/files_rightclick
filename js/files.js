@@ -63,7 +63,7 @@
                 $(currentFile.find('input.selectCheckBox')).click();
             });
 
-            $.each($('.selectedActions .menu-center li:not(.hidden)'), function (i, selectedAction) {
+            $.each($('.selectedActions:not(.hidden) .menu-center li:not(.hidden)'), function (i, selectedAction) {
                 var action = $(selectedAction);
 
                 addNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
