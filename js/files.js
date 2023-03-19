@@ -66,7 +66,7 @@
             $.each($('.selectedActions .menu-center li:not(.hidden)'), function (i, selectedAction) {
                 var action = $(selectedAction);
 
-                addNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span:not(.icon)')).text(), function () {
+                addNewOption(action.attr('class'), $(action.find('span.icon')).attr('class').replace('icon', '').replace(' ', '').replace('icon-', ''), $(action.find('span')).text(), function () {
                     action.find('a').click();
                 }, false);
             });
