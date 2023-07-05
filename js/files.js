@@ -59,8 +59,8 @@
         if (currentFile.hasClass('selected')) {
             menu.find('ul').html('');
 
-            addNewOption('Check', 'category-disabled', t(appName, 'Unselect'), function () {
-                $(currentFile.find('input.selectCheckBox')).click();
+            addNewOption('Check', 'category-disabled', t(appName, 'Unselect all'), function () {
+                currentFile.closest('tbody').find('tr input.selectCheckBox:checked').trigger('click')
             });
 
             $.each($('.selectedActions:not(.hidden) .menu-center li:not(.hidden)'), function (i, selectedAction) {
