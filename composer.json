@@ -1,0 +1,33 @@
+{
+    "name": "nextcloud/files_rightclick",
+    "description": "Right click menu for Nextcloud",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "NASTUZZI Samy",
+            "email": "samy@nastuzzi.fr"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "nextcloud/coding-standard": "1.1.1",
+        "nextcloud/ocp": "dev-master"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "platform": {
+            "php": "8.1"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OCP\\": "vendor/nextcloud/ocp/OCP",
+            "OCA\\FilesRightClick\\": "lib/"
+        }
+    },
+    "scripts": {
+        "lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l"
+    }
+}
