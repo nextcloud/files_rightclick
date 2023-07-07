@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "إلغاء التحديد",
     "Share folder" : "مُشاركة مُجلّد",
     "Share file" : "مُشاركة ملف",
     "Select" : "تحديد",

@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Desautatu",
+    "Unselect all" : "Desautatu dena",
     "Share folder" : "Partekatu karpeta",
     "Share file" : "Partekatu fitxategia",
     "Select" : "Hautatu",

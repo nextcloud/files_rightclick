@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Размаркирай",
     "Share folder" : "Споделяне на папка",
     "Share file" : "Споделяне на файл",
     "Select" : "Избери",

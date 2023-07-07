@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Malelekti",
     "Select" : "Elekti",
     "Copied !" : "Kopiita!",
     "Right click" : "Dekstra alklako",
