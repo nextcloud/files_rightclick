@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Dizibab",
     "Select" : "Dibab",
     "Copied !" : "Eilet !",
     "Right click" : "Klik dehou",

@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "取消选择",
+    "Unselect all" : "取消全选",
     "Share folder" : "共享文件夹",
     "Share file" : "共享文件",
     "Select" : "选择",

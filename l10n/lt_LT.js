@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Nuimti žymėjimą",
     "Share folder" : "Bendrinti aplanką",
     "Share file" : "Bendrinti failą",
     "Select" : "Žymėti",

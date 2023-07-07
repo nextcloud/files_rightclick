@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Odznacz",
+    "Unselect all" : "Odznacz wszystko",
     "Share folder" : "Udostępnij katalog",
     "Share file" : "Udostępnij plik",
     "Select" : "Wybierz",

@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Odstrani izbor",
+    "Unselect all" : "Odstrani izbor",
     "Share folder" : "Omogoči souporabo mape",
     "Share file" : "Omogoči souporabo datoteke",
     "Select" : "Izberi",

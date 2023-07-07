@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "ביטול בחירה",
     "Select" : "בחירה",
     "Copied !" : "הועתק!",
     "Right click" : "כפתור ימני",

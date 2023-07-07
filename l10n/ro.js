@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Neselectat",
     "Share folder" : "Distribuie dosar",
     "Share file" : "Distribuie fișier",
     "Select" : "Selectează",

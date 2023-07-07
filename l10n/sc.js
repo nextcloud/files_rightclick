@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Deseletziona",
     "Share folder" : "Cumpartzi cartella",
     "Share file" : "Cumpartzi archìviu",
     "Select" : "Seletziona",
