@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Avmarkera",
+    "Unselect all" : "Avmarkera alla",
     "Share folder" : "Dela mapp",
     "Share file" : "Dela fil",
     "Select" : "Välj",

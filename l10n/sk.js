@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Zrušiť výber",
     "Share folder" : "Zdieľať priečinok",
     "Share file" : "Zdieľať súbor",
     "Select" : "Vybrať",

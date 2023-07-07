@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Αναίρεση επιλογής",
+    "Unselect all" : "Αποεπιλογή όλων",
     "Share folder" : "Διαμοιρασμός φακέλου",
     "Share file" : "Διαμοιρασμός αρχείου",
     "Select" : "Επιλογή",

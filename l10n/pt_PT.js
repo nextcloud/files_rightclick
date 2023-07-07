@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Não selecionar",
     "Share folder" : "Partilhar pasta",
     "Share file" : "Partilhar ficheiro",
     "Select" : "Selecionar",
