@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Poista valinta",
+    "Unselect all" : "Poista valinnat",
     "Share folder" : "Jaa kansio",
     "Share file" : "Jaa tiedosto",
     "Select" : "Valitse",

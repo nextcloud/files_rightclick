@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Зняти виділення",
+    "Unselect all" : "Зняти вибір",
     "Share folder" : "Спільний доступ для каталогу",
     "Share file" : "Поділитися файлом",
     "Select" : "Вибрати",

@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Abwählen",
+    "Unselect all" : "Auswahl aufheben",
     "Share folder" : "Ordner teilen",
     "Share file" : "Datei teilen",
     "Select" : "Auswählen",

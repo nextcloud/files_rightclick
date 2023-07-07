@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "Bırak",
+    "Unselect all" : "Tümünü bırak",
     "Share folder" : "Klasör paylaş",
     "Share file" : "Dosya paylaş",
     "Select" : "Seç",

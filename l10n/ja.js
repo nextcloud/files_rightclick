@@ -1,7 +1,6 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect" : "選択解除",
     "Share folder" : "フォルダーを共有",
     "Share file" : "ファイルを共有",
     "Select" : "選択",
