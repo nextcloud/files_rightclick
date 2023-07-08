@@ -1,7 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
-    "Unselect all" : "Desmarrcar todos",
+    "Unselect all" : "Desmarcar todos",
     "Share folder" : "Compartir carpeta",
     "Share file" : "Compartir archivo",
     "Select" : "Seleccionar",
