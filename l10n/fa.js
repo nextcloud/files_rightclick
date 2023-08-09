@@ -1,6 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
+    "Unselect all" : "همه را لغو انتخاب کنید",
     "Share folder" : "اشتراک‌گذاری پوشه",
     "Share file" : "اشتراک‌گذاری پرونده",
     "Select" : "انتخاب",
