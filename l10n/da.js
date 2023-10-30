@@ -1,6 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
+    "Unselect all" : "Fravælg alle",
     "Share folder" : "Del mappe",
     "Share file" : "Del fil",
     "Select" : "Vælg",
