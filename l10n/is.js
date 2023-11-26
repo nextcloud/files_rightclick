@@ -1,6 +1,7 @@
 OC.L10N.register(
     "files_rightclick",
     {
+    "Unselect all" : "Afvelja allt",
     "Select" : "Velja",
     "Copied !" : "Afritað!",
     "Right click" : "Hægrismella",
