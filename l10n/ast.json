@@ -1,4 +1,5 @@
 { "translations": {
-    "Unselect all" : "Deseleicionar too"
+    "Unselect all" : "Deseleicionar too",
+    "Select" : "Seleicionar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
