@@ -1,5 +1,7 @@
 { "translations": {
     "Unselect all" : "Deseleicionar too",
-    "Select" : "Seleicionar"
+    "Select" : "Seleicionar",
+    "Copied !" : "¡Copióse!",
+    "Right click" : "Clic derechu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
