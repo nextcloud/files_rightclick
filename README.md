@@ -1,3 +1,6 @@
+⚠️ As of Nextcloud 28, this app is deprecated.
+The right click feature has been merged upstream.
+
 # Right click for Nextcloud
   This app allows users and developers to have a right click menu.
   Simply use the RightClick object to quickly create context menus.
